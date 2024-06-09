@@ -38,12 +38,15 @@
 
             <!-- /.card-header -->
             <div class="card-body">
+            <label for="">Tanggal Pencarian:</label>
+            <input id='tanggal_pencarian' type="date">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Kode Saham</th>
                     <th>Nama</th>
                     <th>Jumlah Pembayaran</th>
+                    <th>Tanggal Pembayaran</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -54,6 +57,7 @@
                       <td><?php echo $s['kode_saham']; ?></td>
                       <td><?php echo $s['nama']; ?></td>
                       <td><?php echo $s['jumlah']; ?></td>
+                      <td><?php echo $s['tanggal_pembayaran_saham']; ?></td>
                       <td>
                         <?php
                         if ($s['status_pembayaran_saham'] == 'diproses') {
@@ -136,6 +140,7 @@
                     <th>Kode Saham</th>
                     <th>Nama</th>
                     <th>Jumlah Pembayaran</th>
+                    <th>Tanggal Pembayaran</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>

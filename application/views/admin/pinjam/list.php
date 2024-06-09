@@ -68,12 +68,15 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+              <label for="">Tanggal Pencarian:</label>
+              <input id='tanggal_pencarian' type="date">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Kode Pinjam</th>
                     <th>Nama</th>
                     <th>Jumlah Pengajuan</th>
+                    <th>Tanggal Pinjam</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -84,6 +87,7 @@
                       <td><?php echo $t['kode_pinjam']; ?></td>
                       <td><?php echo $t['nama']; ?></td>
                       <td><?php echo $t['jumlah_pinjam']; ?></td>
+                      <td><?php echo $t['tgl_pinjam']; ?></td>
                       <td>
                         <?php
                         if ($t['status_pengajuan_pinjam'] == 'diproses') {
@@ -164,6 +168,7 @@
                     <th>Kode Pinjam</th>
                     <th>Nama</th>
                     <th>Jumlah Pengajuan</th>
+                    <th>Tanggal Pinjam</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>

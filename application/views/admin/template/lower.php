@@ -90,6 +90,18 @@
 <script src="<?php echo base_url('assets/admin/plugins'); ?>/dropzone/min/dropzone.min.js"></script>
 <!-- Page specific script -->
 <script>
+  
+    <?php 
+      if ($this->session->userdata('message') !== null){
+        echo 'Swal.fire({
+          title: "Info",
+          text: "' . $this->session->userdata('message') . '",
+          icon: "info"
+        });';
+        $this->session->unset_userdata('message'); 
+      }
+    ?>
+
   $(function () {
     bsCustomFileInput.init();
   });
@@ -111,10 +123,10 @@
       preview.src = ''; // Jika tidak ada gambar yang dipilih
     }
   }
-
+  var Toast;
   // sweetalert Toastr
   $(function () {
-    var Toast = Swal.mixin({
+    Toast = Swal.mixin({
       toast: true,
       position: 'top-end',
       showConfirmButton: false,
@@ -351,6 +363,10 @@
         "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"],
         "ordering": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+      $("#tanggal_pencarian").on('change', function () {
+        $("#example1").DataTable().columns(-3).search(this.value).draw();
+      });
 
       $('#example2').DataTable({
         "paging": true,

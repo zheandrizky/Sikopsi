@@ -37,12 +37,15 @@
 
             <!-- /.card-header -->
             <div class="card-body">
+            <label for="">Tanggal Pencarian:</label>
+            <input id='tanggal_pencarian' type="date">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Kode Tabungan</th>
                     <th>Nama</th>
                     <th>Jumlah Pembayaran</th>
+                    <th>Tanggal Nabung</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
@@ -53,6 +56,7 @@
                       <td><?php echo $t['kode_tabungan']; ?></td>
                       <td><?php echo $t['nama']; ?></td>
                       <td><?php echo $t['jumlah_nabung']; ?></td>
+                      <td><?php echo $t['tanggal_nabung']; ?></td>
                       <td>
                         <?php
                         if ($t['status_pembayaran_tabungan'] == 'diproses') {
@@ -130,6 +134,7 @@
                     <th>Kode Tabungan</th>
                     <th>Nama</th>
                     <th>Jumlah Pembayaran</th>
+                    <th>Tanggal Nabung</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>

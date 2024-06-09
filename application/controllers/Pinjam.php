@@ -19,6 +19,19 @@ class Pinjam extends My_Controller
         $this->load->view('admin/pinjam/list.php', $data);
         $this->load->view('admin/template/lower.php');
 
+        if ($this->session->userdata('jabatan') == 'anggota') {
+            $this->db->select('SUM(s.jumlah) as total');
+            $this->db->from('saham s');
+            $this->db->join('anggota a', 's.nik = a.nik', 'left');
+            $this->db->where('s.nik', $this->session->userdata('nik'));
+            $total = $this->db->get()->row()->total;
+
+            if($total < 250000) {
+                $this->session->set_userdata('message', "The event was succesfully removed"); 
+                redirect($_SERVER['HTTP_REFERER']);
+            }
+        }
+
     }
 
     public function add()
