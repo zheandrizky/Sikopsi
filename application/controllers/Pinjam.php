@@ -9,6 +9,7 @@ class Pinjam extends My_Controller
         parent::__construct();
         $this->check_login();
         $this->load->model('Pinjam_model');
+        $this->load->model('Pengembalian_model');
     }
 
     public function index()
@@ -23,8 +24,6 @@ class Pinjam extends My_Controller
 
     public function add()
     {
-        $data['title'] = "Add Pinjam";
-
         // Generate kode pinjam baru
         $last_kode_pinjam = $this->Pinjam_model->get_last_kode_pinjam();
         $new_kode_pinjam = $this->generate_new_kode_pinjam($last_kode_pinjam);
@@ -33,7 +32,7 @@ class Pinjam extends My_Controller
         $data = array(
             'kode_pinjam' => $new_kode_pinjam,
             'nik' => $this->session->userdata('nik'),
-            'jumlah_pinjam' => $this->input->post('jumlah'),
+            'jumlah_pinjam' => $this->input->post('jumlah_pinjam'),
             'status_pengajuan_pinjam' => 'diproses',
         );
         $this->Pinjam_model->add_pinjam($data);
@@ -46,12 +45,11 @@ class Pinjam extends My_Controller
     private function generate_new_kode_pinjam($last_kode_pinjam)
     {
         $number = (int) substr($last_kode_pinjam, 3) + 1;
-        return 'TAB' . str_pad($number, 3, '0', STR_PAD_LEFT);
+        return 'PJM' . str_pad($number, 3, '0', STR_PAD_LEFT);
     }
 
-    public function update()
+    public function update($kode_pinjam)
     {
-        $data['title'] = "Update Saham";
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $config['upload_path'] = './assets/uploads/pinjam/';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
@@ -60,6 +58,8 @@ class Pinjam extends My_Controller
             $this->upload->initialize($config);
 
             if (!$this->upload->do_upload('bukti_pembayaran')) {
+                echo print_r('asjdjk');
+                die;
                 $data['error'] = $this->upload->display_errors();
                 log_message('error', 'Upload Error: ' . $data['error']);
                 $this->load->view('admin/template/upper.php', $data);
@@ -78,7 +78,7 @@ class Pinjam extends My_Controller
                     log_message('debug', 'Successfully renamed to ' . $unique_file_name);
 
                     // Generate kode pinjam baru
-                    $last_kode_pinjam = $this->Saham_model->get_last_kode_pinjam();
+                    $last_kode_pinjam = $this->Pinjam_model->get_last_kode_pinjam();
                     $new_kode_pinjam = $this->generate_new_kode_pinjam($last_kode_pinjam);
 
                     // Mendapatkan tanggal hari ini
@@ -86,23 +86,22 @@ class Pinjam extends My_Controller
 
                     // Menambahkan 5 bulan ke tanggal hari ini
                     $jatuh_tempo = date('Y-m-d', strtotime('+5 months', strtotime($today)));
+                    // hitung bunga pinjam
+                    $jumlah_pinjam = $this->input->post('jumlah_pinjam');
+                    $bunga_pinjaman = $jumlah_pinjam * 0.05;
                     // Ambil inputan lain
                     $data = array(
-                        'kode_pinjam' => $this->input->post('kode_pinjam'),
-                        'nik' => $this->session->userdata('nik'),
-                        'jumlah' => $this->input->post('jumlah'),
+                        'jumlah_pinjam' => jumlah_pinjam,
                         'status_pengajuan_pinjam' => $this->input->post('status_pengajuan_pinjam'),
                         'keterangan_pengajuan_pinjam' => $this->input->post('keterangan_pengajuan_pinjam'),
                     );
 
-                    if ($this->input->post('status_pengajuan_pinjam') !== 'ditolak') {
+                    if ($this->input->post('status_pengajuan_pinjam') == 'diterima') {
                         $data['tgl_pinjam'] = $today;
                         $data['bukti_peminjaman'] = $unique_file_name;
                         $data['jatuh_tempo'] = $jatuh_tempo;
+                        $data['bunga_pinjaman'] = $bunga_pinjaman;
                     }
-
-                    $this->Saham_model->add_pinjam($data);
-                    redirect('pinjam');
 
                 } else {
                     $data['error'] = 'Failed to rename the uploaded file.';
@@ -112,10 +111,22 @@ class Pinjam extends My_Controller
                     $this->load->view('admin/template/lower.php');
                 }
             }
-
+            $this->Pinjam_model->update_pinjam($kode_pinjam, $data);
+            redirect('pinjam');
         } else {
+            $data['title'] = "Detail Peminjaman";
+            $data['pengembalian'] = $this->Pengembalian_model->get_pengembalian_by_kode_pinjam($kode_pinjam);
+
+            // Dapatkan informasi pinjaman
+            $pinjaman_info = $this->Pinjam_model->get_pinjaman_by_kode_pinjam($kode_pinjam);
+
+            $data['kode_pinjam'] = $pinjaman_info['kode_pinjam'];
+            $data['jumlah_pinjam'] = $pinjaman_info['jumlah_pinjam'];
+            $data['bunga_pinjaman'] = $pinjaman_info['bunga_pinjaman'];
+            $data['jatuh_tempo'] = $pinjaman_info['jatuh_tempo'];
+
             $this->load->view('admin/template/upper.php', $data);
-            $this->load->view('admin/pinjam/add.php', $data);
+            $this->load->view('admin/pinjam/detail.php', $data);
             $this->load->view('admin/template/lower.php');
         }
     }
