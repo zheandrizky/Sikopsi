@@ -28,13 +28,11 @@
                   <h3 class="card-title">DataTable with default features</h3>
                 </div>
                 <div class="col-md-6 text-right">
-                  <!-- <a class="btn btn-primary float-right" href="<?php //echo site_url('pinjam/add'); ?>">Add</a> -->
                   <?php if ($this->session->userdata('jabatan') == 'anggota'): ?>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg-add">
                       Add
                     </button>
                   <?php endif; ?>
-
                 </div>
               </div>
             </div>
@@ -47,11 +45,11 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <?php echo form_open_multipart('pinjam/add'); ?>
+                  <?php echo form_open_multipart('pengembalian/add'); ?>
                   <div class="modal-body">
                     <div class="form-group">
                       <label for="jumlah">Jumlah yang diajukan</label>
-                      <input type="number" class="form-control" placeholder="0" name="jumlah_pinjam" required>
+                      <input type="number" class="form-control" placeholder="0" name="jumlah_pengembalian" required>
                     </div>
                     <!-- /.card-body -->
                   </div>
@@ -68,51 +66,59 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <label for="">Tanggal Pencarian:</label>
-              <input id='tanggal_pencarian' type="date">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <strong>Kode Pinjam:</strong> <?php echo $kode_pinjam; ?>
+                </div>
+                <div class="col-md-4">
+                  <strong>Jumlah Pinjam:</strong> <?php echo $jumlah_pinjam; ?>
+                </div>
+                <div class="col-md-4">
+                  <strong>Bunga Pinjaman:</strong> <?php echo $bunga_pinjaman; ?>
+                </div>
+                <div class="col-md-4">
+                  <strong>Jatuh Tempo:</strong> <?php echo $jatuh_tempo; ?>
+                </div>
+              </div>
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Kode Pinjam</th>
-                    <th>Nama</th>
                     <th>Jumlah Pengajuan</th>
-                    <th>Tanggal Pinjam</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($pinjam as $p) { ?>
+                  <?php foreach ($pengembalian as $p) { ?>
                     <tr>
-                      <td><?php echo $p['kode_pinjam']; ?></td>
-                      <td><?php echo $p['nama']; ?></td>
-                      <td><?php echo $p['jumlah_pinjam']; ?></td>
-                      <td><?php echo $p['tgl_pinjam']; ?></td>
+                      <td><?php echo $p['kode_pengembalian']; ?></td>
+                      <td><?php echo $p['jumlah_pengembalian']; ?></td>
                       <td>
                         <?php
-                        if ($p['status_pengajuan_pinjam'] == 'diproses') {
+                        if ($p['status_pengembalian'] == 'diproses') {
                           $color = 'warning';
-                        } elseif ($p['status_pengajuan_pinjam'] == 'ditolak') {
+                        } elseif ($p['status_pengembalian'] == 'ditolak') {
                           $color = 'danger';
                         } else {
                           $color = 'success';
                         }
                         ?>
-                        <span class='badge bg-<?php echo $color; ?>'><?php echo $p['status_pengajuan_pinjam']; ?></span>
+                        <span class='badge bg-<?php echo $color; ?>'><?php echo $p['status_pengembalian']; ?></span>
                       </td>
                       <td>
                         <?php if ($this->session->userdata('jabatan') == 'pengurus') { ?>
                           <button type="button" class="btn btn-warning" data-toggle="modal"
-                            data-target="#modal-lg-<?php echo $p['kode_pinjam'] ?>"><i class="fas fa-pencil-alt"></i>
+                            data-target="#modal-lg-<?php echo $p['kode_pengembalian'] ?>"><i class="fas fa-pencil-alt"></i>
                             Manage
                           </button>
                         <?php } ?>
-                        <a class="btn btn-primary" href="<?php echo site_url('pinjam/update/' . $p['kode_pinjam']); ?>">
+                        <a class="btn btn-primary" href="<?php echo site_url('pengembalian/update/' . $p['kode_pengembalian']); ?>">
                           <i class="fas fa-eye"></i> Detail
                         </a>
                       </td>
                     </tr>
-                    <div class="modal fade" id="modal-lg-<?php echo $p['kode_pinjam'] ?>">
+                    <div class="modal fade" id="modal-lg-<?php echo $p['kode_pengembalian'] ?>">
                       <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -122,12 +128,12 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <?php echo form_open_multipart('pinjam/update'); ?>
-                            <input type="hidden" name="kode_pinjam" value="<?php echo $p['kode_pinjam'] ?>">
+                            <?php echo form_open_multipart('pengembalian/update'); ?>
+                            <input type="hidden" name="kode_pengembalian" value="<?php echo $p['kode_pengembalian'] ?>">
                             <div class="form-group">
-                              <label for="jumlah_pinjam">Jumlah yang dibayarkan</label>
+                              <label for="jumlah_pengembalian">Jumlah yang dibayarkan</label>
                               <input type="number" class="form-control" placeholder="0"
-                                value="<?php echo $p['jumlah_pinjam']; ?>" name="jumlah_pinjam" readonly>
+                                value="<?php echo $p['jumlah_pengembalian']; ?>" name="jumlah_pengembalian" readonly>
                             </div>
                             <div class="form-group">
                               <label for="bukti_pembayaran">Upload Bukti</label>
@@ -141,16 +147,16 @@
                               style="max-width: 200px; max-height: 200px; display: none;">
                             <div class="form-group col-sm-6">
                               <label>Status</label>
-                              <select name="status_pengajuan_pinjam" class="form-control select2" style="width: 100%;">
-                                <option value="diproses" <?php echo ($p['status_pengajuan_pinjam'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
-                                <option value="ditolak" <?php echo ($p['status_pengajuan_pinjam'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
-                                <option value="diterima" <?php echo ($p['status_pengajuan_pinjam'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
+                              <select name="status_pengembalian" class="form-control select2" style="width: 100%;">
+                                <option value="diproses" <?php echo ($p['status_pengembalian'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
+                                <option value="ditolak" <?php echo ($p['status_pengembalian'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
+                                <option value="diterima" <?php echo ($p['status_pengembalian'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
                               </select>
                             </div>
                             <div class="form-group">
                               <label>Textarea</label>
-                              <textarea name="keterangan_pengajuan_pinjam" class="form-control" rows="3"
-                                placeholder="Masukkan keterangan..."><?php echo $p['keterangan_pengajuan_pinjam']; ?></textarea>
+                              <textarea name="keterangan_pengajuan_pengembalian" class="form-control" rows="3"
+                                placeholder="Masukkan keterangan..."><?php echo $p['keterangan_pengajuan_pengembalian']; ?></textarea>
                             </div>
                             <!-- /.card-body -->
                           </div>
@@ -170,9 +176,7 @@
                 <tfoot>
                   <tr>
                     <th>Kode Pinjam</th>
-                    <th>Nama</th>
                     <th>Jumlah Pengajuan</th>
-                    <th>Tanggal Pinjam</th>
                     <th>Status</th>
                     <th>Action</th>
                   </tr>

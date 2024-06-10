@@ -48,4 +48,12 @@ class Pinjam_model extends CI_Model
         $this->db->where('kode_pinjam', $kode_pinjam);
         $this->db->update('pinjam', $data);
     }
+
+    public function get_pinjaman_by_kode_pinjam($kode_pinjam) {
+        $this->db->select('kode_pinjam, jumlah_pinjam, bunga_pinjaman, jatuh_tempo');
+        $this->db->from('pinjam');
+        $this->db->where('kode_pinjam', $kode_pinjam);
+        $query = $this->db->get();
+        return $query->row_array();
+    }
 }
