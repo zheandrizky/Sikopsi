@@ -68,8 +68,11 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <label for="">Tanggal Pencarian:</label>
-              <input id='tanggal_pencarian' type="date">
+              <label for="start_date">Start Date:</label>
+              <input type="date" id="start_date">
+              <label for="end_date">End Date:</label>
+              <input type="date" id="end_date">
+              <br>
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>

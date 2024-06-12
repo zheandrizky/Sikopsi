@@ -28,7 +28,7 @@ class Pinjam extends My_Controller
             $total = $this->db->get()->row()->total;
 
             if($total < 250000) {
-                $this->session->set_userdata('message', "The event was succesfully removed"); 
+                $this->session->set_userdata('message', "Mohon untuk melunasi uang saham terlebih dahulu"); 
                 redirect($_SERVER['HTTP_REFERER']);
             }
         }

@@ -364,8 +364,28 @@
         "ordering": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-      $("#tanggal_pencarian").on('change', function () {
-        $("#example1").DataTable().columns(-3).search(this.value).draw();
+      var table = $('#example1').DataTable();
+
+      // Custom filtering function
+      DataTable.ext.search.push(
+          function(settings, data, dataIndex) {
+              var startDate = $('#start_date').val();
+              var endDate = $('#end_date').val();
+              var date = data[3]; // Use data for the date column
+              console.log(data);
+              if ((startDate == "" && endDate == "") ||
+                  (startDate == "" && date <= endDate) ||
+                  (startDate <= date && endDate == "") ||
+                  (startDate <= date && date <= endDate)) {
+                  return true;
+              }
+              return false;
+          }
+      );
+
+      // Event listener to the two range filtering inputs to redraw on input
+      $('#start_date, #end_date').change(function() {
+          table.draw();
       });
 
       $('#example2').DataTable({
