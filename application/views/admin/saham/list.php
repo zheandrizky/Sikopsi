@@ -47,7 +47,9 @@
                 <thead>
                   <tr>
                     <th>Kode Saham</th>
-                    <th>Nama</th>
+                    <?php if ($this->session->userdata('jabatan') != 'anggota') { ?>
+                      <th>Nama</th>
+                    <?php } ?>
                     <th>Jumlah Pembayaran</th>
                     <th>Tanggal Pembayaran</th>
                     <th>Status</th>
@@ -58,7 +60,9 @@
                   <?php foreach ($saham as $s) { ?>
                     <tr>
                       <td><?php echo $s['kode_saham']; ?></td>
-                      <td><?php echo $s['nama']; ?></td>
+                      <?php if ($this->session->userdata('jabatan') != 'anggota') { ?>
+                        <td><?php echo $s['nama']; ?></td>
+                      <?php } ?>
                       <td><?php echo $s['jumlah']; ?></td>
                       <td><?php echo $s['tanggal_pembayaran_saham']; ?></td>
                       <td>
@@ -141,7 +145,9 @@
                 <tfoot>
                   <tr>
                     <th>Kode Saham</th>
-                    <th>Nama</th>
+                    <?php if ($this->session->userdata('jabatan') != 'anggota') { ?>
+                      <th>Nama</th>
+                    <?php } ?>
                     <th>Jumlah Pembayaran</th>
                     <th>Tanggal Pembayaran</th>
                     <th>Status</th>

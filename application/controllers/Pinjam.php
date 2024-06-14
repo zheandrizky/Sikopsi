@@ -9,6 +9,7 @@ class Pinjam extends My_Controller
         parent::__construct();
         $this->check_login();
         $this->load->model('Pinjam_model');
+        $this->load->model('Saham_model');
         $this->load->model('Pengembalian_model');
     }
 
@@ -21,14 +22,10 @@ class Pinjam extends My_Controller
         $this->load->view('admin/template/lower.php');
 
         if ($this->session->userdata('jabatan') == 'anggota') {
-            $this->db->select('SUM(s.jumlah) as total');
-            $this->db->from('saham s');
-            $this->db->join('anggota a', 's.nik = a.nik', 'left');
-            $this->db->where('s.nik', $this->session->userdata('nik'));
-            $total = $this->db->get()->row()->total;
+            $total = $this->Saham_model->cek_total_saham();
 
-            if($total < 250000) {
-                $this->session->set_userdata('message', "Mohon untuk melunasi uang saham terlebih dahulu"); 
+            if ($total < 250000) {
+                $this->session->set_userdata('message', "Mohon untuk melunasi uang saham terlebih dahulu");
                 redirect($_SERVER['HTTP_REFERER']);
             }
         }

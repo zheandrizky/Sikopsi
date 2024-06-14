@@ -371,7 +371,8 @@
           function(settings, data, dataIndex) {
               var startDate = $('#start_date').val();
               var endDate = $('#end_date').val();
-              var date = data[3]; // Use data for the date column
+              var dateIndex = data.length - 3; 
+              var date = data[dateIndex];
               console.log(data);
               if ((startDate == "" && endDate == "") ||
                   (startDate == "" && date <= endDate) ||

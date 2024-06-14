@@ -19,9 +19,19 @@ class Saham_model extends CI_Model
         if ($this->session->userdata('jabatan') == 'anggota') {
             $this->db->where('s.nik', $this->session->userdata('nik'));
         }
-        
+
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    public function cek_total_saham()
+    {
+        $this->db->select('SUM(s.jumlah) as total');
+        $this->db->from('saham s');
+        $this->db->join('anggota a', 's.nik = a.nik', 'left');
+        $this->db->where('s.status_pembayaran_saham', 'diterima');
+        $this->db->where('s.nik', $this->session->userdata('nik'));
+        return $this->db->get()->row()->total;
     }
 
     public function get_last_kode_saham()
