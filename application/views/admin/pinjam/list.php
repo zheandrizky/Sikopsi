@@ -66,6 +66,14 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                  <strong>Total Pinjam:</strong> <?php echo idrFormat($total_pinjam) ?>
+                </div>
+                <div class="col-md-4">
+                  <strong>Total Pegembalian:</strong> <?php echo idrFormat($total_pengembalian) ?>
+                </div>
+              </div>
               <label for="start_date">Start Date:</label>
               <input type="date" id="start_date">
               <label for="end_date">End Date:</label>
@@ -87,7 +95,7 @@
                     <tr>
                       <td><?php echo $p['kode_pinjam']; ?></td>
                       <td><?php echo $p['nama']; ?></td>
-                      <td><?php echo $p['jumlah_pinjam']; ?></td>
+                      <td><?php echo idrFormat($p['jumlah_pinjam']); ?></td>
                       <td><?php echo $p['tgl_pinjam']; ?></td>
                       <td>
                         <?php

@@ -14,6 +14,8 @@ class Tabungan extends My_Controller
     public function index()
     {
         $data['title'] = "List Tabungan";
+        $data['total_tabungan'] = $this->Tabungan_model->cek_total_tabungan();
+        // echo print_r($data); die;
         $data['tabungan'] = $this->Tabungan_model->get_all_tabungan();
         $this->load->view('admin/template/upper.php', $data);
         $this->load->view('admin/tabungan/list.php', $data);
@@ -58,9 +60,11 @@ class Tabungan extends My_Controller
                     $data = array(
                         'kode_tabungan' => $new_kode_tabungan,
                         'nik' => $this->session->userdata('nik'),
+                        'tanggal_nabung' => date('Y-m-d'),
                         'jumlah_nabung' => $this->input->post('jumlah'),
                         'bukti_pembayaran_tabungan' => $unique_file_name,
                         'status_pembayaran_tabungan' => 'diproses',
+                        'keterangan_pembayaran_tabungan' => 'Saat ini, pembayaran tabungan Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar',
                     );
                     $this->Tabungan_model->add_tabungan($data);
                     redirect('tabungan');

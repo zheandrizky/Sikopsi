@@ -47,12 +47,12 @@
                     <?php echo form_open_multipart('saham/add'); ?>
                     <div class="card-body">
                       <div class="form-group">
-                        <label for="jumlah">Jumlah yang dibayarkan</label>
+                        <label for="jumlah_saham">Jumlah yang dibayarkan</label>
                         <input type="number" max="<?php echo 250000 - $total_saham ?>" class="form-control"
-                          placeholder="0" name="jumlah" required>
+                          placeholder="0" name="jumlah_saham" required>
                       </div>
-                      <div class="form-group col-md-6">
-                        <label for="jumlah">Bukti Pembayaran</label>
+                      <div class="form-group">
+                        <label for="bukti_pembayaran">Bukti Pembayaran</label>
                         <div class="custom-file">
                           <input type="file" class="custom-file-input" id="customFile" name="bukti_pembayaran" required
                             onchange="previewImage()">
@@ -66,9 +66,7 @@
                       <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                       <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
-
                     <?php echo form_close(); ?>
-
                   </div>
                   <!-- /.modal-content -->
                 </div>
@@ -78,6 +76,12 @@
 
             <!-- /.card-header -->
             <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <strong>Total Saham:</strong> <?php echo idrFormat($total_saham) ?>
+                  <?php echo ($total_saham == 250000) ? '<span class="badge badge-success">Lunas</span>' : '' ?>
+                </div>
+              </div>
               <label for="start_date">Start Date:</label>
               <input type="date" id="start_date">
               <label for="end_date">End Date:</label>
@@ -103,7 +107,7 @@
                       <?php if ($this->session->userdata('jabatan') != 'anggota') { ?>
                         <td><?php echo $s['nama']; ?></td>
                       <?php } ?>
-                      <td><?php echo $s['jumlah']; ?></td>
+                      <td><?php echo idrFormat($s['jumlah_saham']); ?></td>
                       <td><?php echo $s['tanggal_pembayaran_saham']; ?></td>
                       <td>
                         <?php
@@ -118,7 +122,6 @@
                         <span class='badge bg-<?php echo $color; ?>'><?php echo $s['status_pembayaran_saham']; ?></span>
                       </td>
                       <td>
-
                         <button type="button"
                           class="btn btn-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'info' : 'warning'; ?>"
                           data-toggle="modal" data-target="#modal-lg-<?php echo $s['kode_saham'] ?>">
@@ -141,9 +144,9 @@
                             <?php echo form_open('saham/update/' . $s['kode_saham']); ?>
                             <input type="hidden" name="kode_saham" value="<?php echo $s['kode_saham'] ?>">
                             <div class="form-group">
-                              <label for="jumlah">Jumlah yang dibayarkan</label>
-                              <input type="number" class="form-control" placeholder="0"
-                                value="<?php echo $s['jumlah']; ?>" name="jumlah" readonly>
+                              <label for="jumlah_saham">Jumlah yang dibayarkan</label>
+                              <input type="text" class="form-control" placeholder="0"
+                                value="<?php echo idrFormat($s['jumlah_saham']); ?>" name="jumlah_saham" readonly>
                             </div>
                             <div class="form-group">
                               <label for="bukti">Bukti Pembayaran</label><br>
@@ -240,26 +243,3 @@
   </section>
   <!-- /.content -->
 </div>
-
-<script>
-  function ubahKeterangan(select) {
-    var kodeSaham = select.id.split('-')[1];
-    var status = select.value;
-    var keteranganTextarea = document.getElementById('keterangan-' + kodeSaham);
-
-    switch (status) {
-      case 'diproses':
-        keteranganTextarea.value = 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar.';
-        break;
-      case 'diterima':
-        keteranganTextarea.value = 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.';
-        break;
-      case 'ditolak':
-        keteranganTextarea.value = 'Maaf, pembayaran saham Anda tidak dapat kami terima setelah melalui proses verifikasi.';
-        break;
-      default:
-        keteranganTextarea.value = '';
-        break;
-    }
-  }
-</script>

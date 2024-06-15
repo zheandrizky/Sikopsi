@@ -16,6 +16,8 @@ class Pinjam extends My_Controller
     public function index()
     {
         $data['title'] = "List Pinjam";
+        $data['total_pinjam'] = $this->Pinjam_model->cek_total_pinjam();
+        $data['total_pengembalian'] = $this->Pengembalian_model->cek_total_pengembalian();
         $data['pinjam'] = $this->Pinjam_model->get_all_pinjam();
         $this->load->view('admin/template/upper.php', $data);
         $this->load->view('admin/pinjam/list.php', $data);

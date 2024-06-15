@@ -60,7 +60,7 @@ class Saham extends My_Controller
                         'kode_saham' => $new_kode_saham,
                         'nik' => $this->session->userdata('nik'),
                         'tanggal_pembayaran_saham' => date('Y-m-d'),
-                        'jumlah' => $this->input->post('jumlah'),
+                        'jumlah_saham' => $this->input->post('jumlah_saham'),
                         'bukti_pembayaran_saham' => $unique_file_name,
                         'status_pembayaran_saham' => 'diproses',
                         'keterangan_pembayaran_saham' => 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar',

@@ -91,17 +91,37 @@
 <!-- Page specific script -->
 <script>
   
-    <?php 
-      if ($this->session->userdata('message') !== null){
-        echo 'Swal.fire({
-          title: "Info",
-          text: "' . $this->session->userdata('message') . '",
-          icon: "' . $this->session->userdata('message_type') . '"
-        });';
-        $this->session->unset_userdata('message'); 
-        $this->session->unset_userdata('message_type'); 
-      }
-    ?>
+  function ubahKeterangan(select) {
+    var kodeSaham = select.id.split('-')[1];
+    var status = select.value;
+    var keteranganTextarea = document.getElementById('keterangan-' + kodeSaham);
+
+    switch (status) {
+      case 'diproses':
+        keteranganTextarea.value = 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar.';
+        break;
+      case 'diterima':
+        keteranganTextarea.value = 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.';
+        break;
+      case 'ditolak':
+        keteranganTextarea.value = 'Maaf, pembayaran saham Anda tidak dapat kami terima setelah melalui proses verifikasi.';
+        break;
+      default:
+        keteranganTextarea.value = '';
+        break;
+    }
+  }
+  <?php 
+    if ($this->session->userdata('message') !== null){
+      echo 'Swal.fire({
+        title: "Info",
+        text: "' . $this->session->userdata('message') . '",
+        icon: "' . $this->session->userdata('message_type') . '"
+      });';
+      $this->session->unset_userdata('message'); 
+      $this->session->unset_userdata('message_type'); 
+    }
+  ?>
 
   $(function () {
     bsCustomFileInput.init();

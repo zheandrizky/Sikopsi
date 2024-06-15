@@ -25,6 +25,17 @@ class Tabungan_model extends CI_Model
         return $query->result_array();
     }
 
+    public function cek_total_tabungan()
+    {
+        $this->db->select('SUM(t.jumlah_nabung) as total');
+        $this->db->from('tabungan t');
+        $this->db->where('t.status_pembayaran_tabungan', 'diterima');
+        if ($this->session->userdata('jabatan') == 'anggota') {
+            $this->db->where('t.nik', $this->session->userdata('nik'));
+        }
+        return $this->db->get()->row()->total;
+    }
+
     public function get_last_kode_tabungan()
     {
         $this->db->select('kode_tabungan');
