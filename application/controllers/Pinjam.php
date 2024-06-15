@@ -25,6 +25,7 @@ class Pinjam extends My_Controller
             $total = $this->Saham_model->cek_total_saham();
 
             if ($total < 250000) {
+                $this->session->set_userdata('message_type', 'info');
                 $this->session->set_userdata('message', "Mohon untuk melunasi uang saham terlebih dahulu");
                 redirect($_SERVER['HTTP_REFERER']);
             }

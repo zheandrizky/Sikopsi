@@ -28,13 +28,11 @@
                   <h3 class="card-title">DataTable with default features</h3>
                 </div>
                 <div class="col-md-6 text-right">
-                  <!-- <a class="btn btn-primary float-right" href="<?php //echo site_url('pinjam/add'); ?>">Add</a> -->
                   <?php if ($this->session->userdata('jabatan') == 'anggota'): ?>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg-add">
                       Add
                     </button>
                   <?php endif; ?>
-
                 </div>
               </div>
             </div>

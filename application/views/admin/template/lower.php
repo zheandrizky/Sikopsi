@@ -96,9 +96,10 @@
         echo 'Swal.fire({
           title: "Info",
           text: "' . $this->session->userdata('message') . '",
-          icon: "info"
+          icon: "' . $this->session->userdata('message_type') . '"
         });';
         $this->session->unset_userdata('message'); 
+        $this->session->unset_userdata('message_type'); 
       }
     ?>
 

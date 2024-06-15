@@ -15,6 +15,7 @@ class Saham_model extends CI_Model
         $this->db->select('s.*, a.nama_anggota as nama');
         $this->db->from('saham s');
         $this->db->join('anggota a', 's.nik = a.nik', 'left');
+        $this->db->order_by('s.kode_saham', 'DESC');
 
         if ($this->session->userdata('jabatan') == 'anggota') {
             $this->db->where('s.nik', $this->session->userdata('nik'));
@@ -58,4 +59,10 @@ class Saham_model extends CI_Model
         $this->db->where('kode_saham', $kode_saham);
         $this->db->update('saham', $data);
     }
+
+    public function delete_saham($kode_saham) {
+        $this->db->where('kode_saham', $kode_saham);
+        return $this->db->delete('saham');
+    }
+    
 }

@@ -15,9 +15,12 @@ class Tabungan_model extends CI_Model
         $this->db->select('t.*, a.nama_anggota as nama');
         $this->db->from('tabungan t');
         $this->db->join('anggota a', 't.nik = a.nik', 'left');
+        $this->db->order_by('t.kode_tabungan', 'DESC');
+
         if ($this->session->userdata('jabatan') == 'anggota') {
             $this->db->where('t.nik', $this->session->userdata('nik'));
         }
+
         $query = $this->db->get();
         return $query->result_array();
     }

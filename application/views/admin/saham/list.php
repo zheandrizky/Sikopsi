@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>DataTables</h1>
+          <h1>Saham</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -25,14 +25,54 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-md-6">
-                  <h3 class="card-title">DataTable with default features</h3>
+                  <h3 class="card-title">Data Pembayaran Saham</h3>
                 </div>
                 <div class="col-md-6 text-right">
-                  <?php if ($this->session->userdata('jabatan') == 'anggota'): ?>
-                    <a class="btn btn-primary float-right" href="<?php echo site_url('saham/add'); ?>">Add</a>
+                  <?php if (($this->session->userdata('jabatan') == 'anggota') && $total_saham < 250000): ?>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg-add">
+                      Add
+                    </button>
                   <?php endif; ?>
-
                 </div>
+              </div>
+              <div class="modal fade" id="modal-lg-add">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">Pembayaran Saham</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <?php echo form_open_multipart('saham/add'); ?>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="jumlah">Jumlah yang dibayarkan</label>
+                        <input type="number" max="<?php echo 250000 - $total_saham ?>" class="form-control"
+                          placeholder="0" name="jumlah" required>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="jumlah">Bukti Pembayaran</label>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="customFile" name="bukti_pembayaran" required
+                            onchange="previewImage()">
+                          <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                      </div>
+                      <img id="preview" src="#" alt="Preview"
+                        style="max-width: 200px; max-height: 200px; display: none;">
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+
+                    <?php echo form_close(); ?>
+
+                  </div>
+                  <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
               </div>
             </div>
 
@@ -79,9 +119,12 @@
                       </td>
                       <td>
 
-                        <button type="button" class="btn btn-warning" data-toggle="modal"
-                          data-target="#modal-lg-<?php echo $s['kode_saham'] ?>"><i class="fas fa-pencil-alt"></i>
-                          Manage
+                        <button type="button"
+                          class="btn btn-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'info' : 'warning'; ?>"
+                          data-toggle="modal" data-target="#modal-lg-<?php echo $s['kode_saham'] ?>">
+                          <i
+                            class="fas fa-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'eye' : 'pencil-alt'; ?>"></i>
+                          <?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'Detail' : 'Manage'; ?>
                         </button>
                       </td>
                     </tr>
@@ -89,7 +132,7 @@
                       <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h4 class="modal-title">Large Modal</h4>
+                            <h4 class="modal-title">Detail Saham <?php echo $s['kode_saham'] ?></h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -106,32 +149,35 @@
                               <label for="bukti">Bukti Pembayaran</label><br>
                               <img id="preview"
                                 src="<?php echo base_url('assets/uploads/saham/' . $s['bukti_pembayaran_saham']); ?>"
-                                alt="Preview" style="max-width: 200px; max-height: 200px;">
-                              <!-- <a href="<?php //echo base_url('assets/uploads/saham/' . $s['bukti_pembayaran_saham']); ?>"
-                                target="_blank">
-                                <img class="preview-image"
-                                  src="<?php //echo base_url('assets/uploads/saham/' . $s['bukti_pembayaran_saham']); ?>"
-                                  alt="Preview" style="max-width: 200px; max-height: 200px;">
-                              </a> -->
+                                alt="Preview" style="max-width: 200px; max-height: 200px;"><br>
+                              <a href="<?php echo base_url('assets/uploads/saham/' . $s['bukti_pembayaran_saham']); ?>"
+                                target="_blank">Lihat Full Gambar</a>
                             </div>
                             <div class="form-group col-sm-6">
                               <label>Status</label>
-                              <select name="status_pembayaran_saham" class="form-control select2" style="width: 100%;">
+                              <select id="status-<?php echo $s['kode_saham'] ?>" name="status_pembayaran_saham"
+                                class="form-control select2" style="width: 100%;" onchange="ubahKeterangan(this)" <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'disabled' : ''; ?>>
                                 <option value="diproses" <?php echo ($s['status_pembayaran_saham'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
                                 <option value="ditolak" <?php echo ($s['status_pembayaran_saham'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
                                 <option value="diterima" <?php echo ($s['status_pembayaran_saham'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
                               </select>
                             </div>
                             <div class="form-group">
-                              <label>Textarea</label>
-                              <textarea name="keterangan_pembayaran_saham" class="form-control" rows="3"
-                                placeholder="Masukkan keterangan..."><?php echo $s['keterangan_pembayaran_saham']; ?></textarea>
+                              <label>Keterangan</label>
+                              <textarea id="keterangan-<?php echo $s['kode_saham'] ?>" name="keterangan_pembayaran_saham"
+                                class="form-control" rows="3" placeholder="Masukkan keterangan..." <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'readonly' : ''; ?>><?php echo $s['keterangan_pembayaran_saham']; ?></textarea>
                             </div>
                             <!-- /.card-body -->
                           </div>
                           <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <?php if ($this->session->userdata('jabatan') == 'anggota' && $s['status_pembayaran_saham'] == 'diproses'): ?>
+                              <button type="button" class="btn btn-danger" data-toggle="modal"
+                                data-target="#modal-delete-<?php echo $s['kode_saham'] ?>"> <i class="fas fa-trash"></i>
+                                Hapus Pengajuan </button>
+                            <?php endif ?>
+                            <?php if ($this->session->userdata('jabatan') == 'pengurus') { ?>
+                              <button type="submit" class="btn btn-primary">Save changes</button>
+                            <?php } ?>
                             <?php echo form_close(); ?>
                           </div>
                         </div>
@@ -139,6 +185,32 @@
                       </div>
                       <!-- /.modal-dialog -->
                     </div>
+
+                    <!-- modal delete -->
+                    <!-- Modal Delete -->
+                    <div class="modal fade" id="modal-delete-<?php echo $s['kode_saham'] ?>">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Konfirmasi Hapus Data Saham</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>Apakah Anda yakin ingin menghapus data saham ini?</p>
+                          </div>
+                          <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <a href="<?php echo base_url('saham/delete/' . $s['kode_saham']); ?>"
+                              class="btn btn-danger">Ya, Hapus</a>
+                          </div>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                      <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
                   <?php } ?>
 
                 </tbody>
@@ -168,3 +240,26 @@
   </section>
   <!-- /.content -->
 </div>
+
+<script>
+  function ubahKeterangan(select) {
+    var kodeSaham = select.id.split('-')[1];
+    var status = select.value;
+    var keteranganTextarea = document.getElementById('keterangan-' + kodeSaham);
+
+    switch (status) {
+      case 'diproses':
+        keteranganTextarea.value = 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar.';
+        break;
+      case 'diterima':
+        keteranganTextarea.value = 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.';
+        break;
+      case 'ditolak':
+        keteranganTextarea.value = 'Maaf, pembayaran saham Anda tidak dapat kami terima setelah melalui proses verifikasi.';
+        break;
+      default:
+        keteranganTextarea.value = '';
+        break;
+    }
+  }
+</script>
