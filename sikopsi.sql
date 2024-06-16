@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 09 Jun 2024 pada 03.24
+-- Waktu pembuatan: 15 Jun 2024 pada 16.28
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -54,6 +54,9 @@ INSERT INTO `anggota` (`nik`, `nama_anggota`, `password`, `alamat_anggota`, `jen
 (108, 'Frank Green', '$2y$10$sTxnIRRkUNNteNPCYFLxTeLsl/.9xYkrSBwnd0Iua9Lk57PXkHsf.', 'Jl. Bougenville No.8', 'Laki-laki', '081234567897', 'Yogyakarta', '1990-08-08', 'anggota'),
 (109, 'Grace Hill', '$2y$10$sTxnIRRkUNNteNPCYFLxTeLsl/.9xYkrSBwnd0Iua9Lk57PXkHsf.', 'Jl. Flamboyan No.9', 'Perempuan', '081234567898', 'Palembang', '1992-09-09', 'anggota'),
 (110, 'Henry Ivan', '$2y$10$sTxnIRRkUNNteNPCYFLxTeLsl/.9xYkrSBwnd0Iua9Lk57PXkHsf.', 'Jl. Teratai No.10', 'Laki-laki', '081234567899', 'Makassar', '1991-10-10', 'anggota'),
+(202, NULL, '$2y$10$m8V3mDgObG41mOIQCb08XeYIbaV0DeL/hJR4XHBUgEPcspT7Z8R7u', NULL, NULL, NULL, NULL, NULL, 'anggota'),
+(203, NULL, '$2y$10$YdmhV5/VtJgn1Zx83Q0RPOSEeT29uWly8cHdv1ud6OgoM2ZgAFLIu', NULL, NULL, NULL, NULL, NULL, 'anggota'),
+(209, NULL, '$2y$10$PllU3lPGqerI6alN4fYEhu57Y0Nt26FxZecj3Y0MJUGWQzk9FiExG', NULL, NULL, NULL, NULL, NULL, 'anggota'),
 (12345, 'Albert', '$2y$10$sTxnIRRkUNNteNPCYFLxTeLsl/.9xYkrSBwnd0Iua9Lk57PXkHsf.', NULL, NULL, NULL, NULL, NULL, 'anggota'),
 (23456, 'Hipose', '$2y$10$sTxnIRRkUNNteNPCYFLxTeLsl/.9xYkrSBwnd0Iua9Lk57PXkHsf.', NULL, NULL, NULL, NULL, NULL, 'anggota'),
 (34567, 'Retide', '$2y$10$sTxnIRRkUNNteNPCYFLxTeLsl/.9xYkrSBwnd0Iua9Lk57PXkHsf.', NULL, NULL, NULL, NULL, NULL, 'anggota');
@@ -70,8 +73,24 @@ CREATE TABLE `pengembalian` (
   `kode_pinjam` varchar(20) NOT NULL,
   `tanggal_pengembalian` date DEFAULT NULL,
   `jumlah_pengembalian` decimal(10,0) DEFAULT NULL,
-  `bukti_pengembalian` varchar(255) DEFAULT NULL
+  `bukti_pengembalian` varchar(255) DEFAULT NULL,
+  `status_pembayaran_pengembalian` varchar(20) NOT NULL,
+  `keterangan_pengembalian` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pengembalian`
+--
+
+INSERT INTO `pengembalian` (`kode_pengembalian`, `nik`, `kode_pinjam`, `tanggal_pengembalian`, `jumlah_pengembalian`, `bukti_pengembalian`, `status_pembayaran_pengembalian`, `keterangan_pengembalian`) VALUES
+('PGM001', 101, 'PJM001', '2024-02-20', 5000000, 'bukti_pg_001.jpg', 'diterima', ''),
+('PGM002', 102, 'PJM002', '2024-03-05', 3000000, 'bukti_pg_002.jpg', 'diterima', ''),
+('PGM004', 104, 'PJM004', '2024-05-20', 2500000, 'bukti_pg_004.jpg', 'diterima', ''),
+('PGM005', 103, 'PJM005', '2024-06-15', 98765432, 'bukti_pg_005.jpg', 'diterima', ''),
+('PGM006', 105, 'PJM004', '2024-06-25', 2500000, 'bukti_pg_006.jpg', 'diterima', ''),
+('PGM007', 106, 'PJM002', '2024-07-10', 3000000, 'bukti_pg_007.jpg', 'diterima', ''),
+('PGM009', 108, 'PJM001', '2024-09-15', 5000000, 'bukti_pg_009.jpg', 'diterima', ''),
+('PGM010', 109, 'PJM005', '2024-10-20', 98765432, 'bukti_pg_010.jpg', 'diterima', '');
 
 -- --------------------------------------------------------
 
@@ -87,20 +106,20 @@ CREATE TABLE `pinjam` (
   `bukti_peminjaman` varchar(255) NOT NULL,
   `jatuh_tempo` date DEFAULT NULL,
   `status_pengajuan_pinjam` varchar(20) NOT NULL,
-  `keterangan_pengajuan_pinjam` text NOT NULL
+  `keterangan_pengajuan_pinjam` text NOT NULL,
+  `bunga_pinjaman` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `pinjam`
 --
 
-INSERT INTO `pinjam` (`kode_pinjam`, `nik`, `jumlah_pinjam`, `tgl_pinjam`, `bukti_peminjaman`, `jatuh_tempo`, `status_pengajuan_pinjam`, `keterangan_pengajuan_pinjam`) VALUES
-('PJM001', 101, 5000000, '2024-01-15', '', '2024-02-15', 'ditolak', ''),
-('PJM002', 102, 3000000, '2024-02-01', '', '2024-03-01', 'ditolak', ''),
-('PJM003', 103, 4500000, '2024-03-05', '', '2024-04-05', 'ditolak', ''),
-('PJM004', 104, 2500000, '2024-03-15', '', '2024-04-15', 'diterima', ''),
-('PJM005', 105, 3500000, '2024-04-01', '', '2024-05-01', 'diproses', ''),
-('TAB006', 103, 5000000, NULL, '', NULL, 'diproses', '');
+INSERT INTO `pinjam` (`kode_pinjam`, `nik`, `jumlah_pinjam`, `tgl_pinjam`, `bukti_peminjaman`, `jatuh_tempo`, `status_pengajuan_pinjam`, `keterangan_pengajuan_pinjam`, `bunga_pinjaman`) VALUES
+('PJM001', 101, 5000000, '2024-01-15', '', '2024-02-15', 'ditolak', '', 0),
+('PJM002', 102, 3000000, '2024-02-01', '', '2024-03-01', 'ditolak', '', 0),
+('PJM003', 103, 4500000, '2024-03-05', '', '2024-04-05', 'ditolak', '', 0),
+('PJM004', 104, 2500000, '2024-03-15', '', '2024-04-15', 'diterima', '', 0),
+('PJM005', 103, 98765432, '2024-06-09', '1717927097_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', '2024-11-09', 'diterima', 'asdfghjfdsd', 0);
 
 -- --------------------------------------------------------
 
@@ -111,7 +130,7 @@ INSERT INTO `pinjam` (`kode_pinjam`, `nik`, `jumlah_pinjam`, `tgl_pinjam`, `bukt
 CREATE TABLE `saham` (
   `kode_saham` varchar(20) NOT NULL,
   `nik` int(11) DEFAULT NULL,
-  `jumlah` int(11) DEFAULT NULL,
+  `jumlah_saham` int(11) DEFAULT NULL,
   `bukti_pembayaran_saham` varchar(255) NOT NULL,
   `status_pembayaran_saham` varchar(12) NOT NULL,
   `keterangan_pembayaran_saham` text NOT NULL,
@@ -122,21 +141,23 @@ CREATE TABLE `saham` (
 -- Dumping data untuk tabel `saham`
 --
 
-INSERT INTO `saham` (`kode_saham`, `nik`, `jumlah`, `bukti_pembayaran_saham`, `status_pembayaran_saham`, `keterangan_pembayaran_saham`, `tanggal_pembayaran_saham`) VALUES
-('SHM001', 101, 100, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'jumlah dan bukti tidak sinkron', NULL),
-('SHM002', 102, 200, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham kedua', NULL),
-('SHM003', 103, 150, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham ketiga', NULL),
-('SHM004', 104, 120, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', 'Pembayaran saham keempat', NULL),
-('SHM005', 105, 300, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham kelima', NULL),
-('SHM006', 106, 250, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', 'Pembayaran saham keenam', NULL),
-('SHM007', 107, 180, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham ketujuh', NULL),
-('SHM008', 108, 220, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham kedelapan', NULL),
-('SHM009', 109, 270, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', 'Pembayaran saham kesembilan', NULL),
-('SHM010', 110, 160, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham kesepuluh', NULL),
-('SHM011', 101, 12312, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', '', NULL),
-('SHM012', 101, 12312312, '1717321942_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', '', NULL),
-('SHM013', NULL, 98765, '1717526238_WhatsApp_Image_2024-02-14_at_07_43_56_eed80ae3.jpg', 'diproses', '', NULL),
-('SHM014', NULL, 87685785, '1717550583_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', '', NULL);
+INSERT INTO `saham` (`kode_saham`, `nik`, `jumlah_saham`, `bukti_pembayaran_saham`, `status_pembayaran_saham`, `keterangan_pembayaran_saham`, `tanggal_pembayaran_saham`) VALUES
+('SHM001', 101, 100, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'jumlah dan bukti tidak sinkron', '2024-06-07'),
+('SHM002', 102, 200, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham kedua', '2024-06-14'),
+('SHM003', 103, 210000, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham ketiga', '2024-06-10'),
+('SHM004', 104, 240000, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham keempat', '2024-06-14'),
+('SHM005', 105, 300, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Pembayaran saham kelima', '2024-06-14'),
+('SHM006', 106, 250, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham keenam', '2024-06-14'),
+('SHM007', 107, 180, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham ketujuh', '2024-06-14'),
+('SHM008', 108, 220, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham kedelapan', '2024-06-14'),
+('SHM009', 109, 270, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', 'Pembayaran saham kesembilan', '2024-06-14'),
+('SHM010', 110, 160, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'ditolak', 'Pembayaran saham kesepuluh', '2024-06-14'),
+('SHM011', 101, 12312, '1717315288_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', '', '2024-06-14'),
+('SHM012', 101, 12312312, '1717321942_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', '', '2024-06-14'),
+('SHM015', 104, 10000, '1718375111_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diproses', 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar.', '2024-06-14'),
+('SHM016', 103, 10000, '1718429384_WhatsApp_Image_2024-02-14_at_07_43_56_eed80ae3.jpg', 'diterima', 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.', '2024-06-15'),
+('SHM017', 107, 250000, '1718432051_WhatsApp_Image_2024-02-14_at_07_50_09_e262d1ea.jpg', 'diterima', 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.', '2024-06-15'),
+('SHM018', 103, 30000, '1718439785_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab8.jpg', 'diterima', 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.', '2024-06-15');
 
 -- --------------------------------------------------------
 
@@ -169,7 +190,8 @@ INSERT INTO `tabungan` (`kode_tabungan`, `nik`, `tanggal_nabung`, `jumlah_nabung
 ('TAB008', 108, '2024-04-15', 4500000, 'bukti5.jpg', 'diterima', ''),
 ('TAB009', 109, '2024-05-01', 5000000, 'bukti5.jpg', 'ditolak', ''),
 ('TAB010', 110, '2024-05-15', 5500000, 'bukti5.jpg', 'ditolak', ''),
-('TAB011', NULL, NULL, 132312, '1717550548_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab81.jpg', 'diproses', '');
+('TAB011', 104, '2024-06-15', 123123123, '1718456200_WhatsApp_Image_2024-02-14_at_07_41_59_6c27eab81.jpg', 'ditolak', 'Maaf, pembayaran saham Anda tidak dapat kami terima setelah melalui proses verifikasi.'),
+('TAB012', 104, '2024-06-15', 150000, '1718458945_WhatsApp_Image_2024-02-14_at_07_51_53_9e6029f3.jpg', 'diterima', 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.');
 
 --
 -- Indexes for dumped tables

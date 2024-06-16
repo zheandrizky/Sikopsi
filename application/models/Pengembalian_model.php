@@ -38,6 +38,18 @@ class Pengembalian_model extends CI_Model
         }
     }
 
+    public function cek_total_pengembalian()
+    {
+        $this->db->select('SUM(p.jumlah_pengembalian) as total');
+        $this->db->from('pengembalian p');
+        $this->db->join('anggota a', 'p.nik = a.nik', 'left');
+        $this->db->where('p.status_pembayaran_pengembalian', 'diterima');
+        if ($this->session->userdata('jabatan') == 'anggota') {
+            $this->db->where('p.nik', $this->session->userdata('nik'));
+        }
+        return $this->db->get()->row()->total;
+    }
+
     public function add_pengembalian($data)
     {
         return $this->db->insert('pengembalian', $data);

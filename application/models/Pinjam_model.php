@@ -24,6 +24,18 @@ class Pinjam_model extends CI_Model
         return $query->result_array();
     }
 
+    public function cek_total_pinjam()
+    {
+        $this->db->select('SUM(p.jumlah_pinjam) as total');
+        $this->db->from('pinjam p');
+        $this->db->join('anggota a', 'p.nik = a.nik', 'left');
+        $this->db->where('p.status_pengajuan_pinjam', 'diterima');
+        if ($this->session->userdata('jabatan') == 'anggota') {
+            $this->db->where('p.nik', $this->session->userdata('nik'));
+        }
+        return $this->db->get()->row()->total;
+    }
+
     public function get_last_kode_pinjam()
     {
         $this->db->select('kode_pinjam');

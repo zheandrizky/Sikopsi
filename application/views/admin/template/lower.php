@@ -150,16 +150,37 @@
     }
   });
   
-    <?php 
-      if ($this->session->userdata('message') !== null){
-        echo 'Swal.fire({
-          title: "Info",
-          text: "' . $this->session->userdata('message') . '",
-          icon: "info"
-        });';
-        $this->session->unset_userdata('message'); 
-      }
-    ?>
+  function ubahKeterangan(select) {
+    var kodeSaham = select.id.split('-')[1];
+    var status = select.value;
+    var keteranganTextarea = document.getElementById('keterangan-' + kodeSaham);
+
+    switch (status) {
+      case 'diproses':
+        keteranganTextarea.value = 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar.';
+        break;
+      case 'diterima':
+        keteranganTextarea.value = 'Selamat! Pembayaran saham Anda telah berhasil diverifikasi dan diterima.';
+        break;
+      case 'ditolak':
+        keteranganTextarea.value = 'Maaf, pembayaran saham Anda tidak dapat kami terima setelah melalui proses verifikasi.';
+        break;
+      default:
+        keteranganTextarea.value = '';
+        break;
+    }
+  }
+  <?php 
+    if ($this->session->userdata('message') !== null){
+      echo 'Swal.fire({
+        title: "Info",
+        text: "' . $this->session->userdata('message') . '",
+        icon: "' . $this->session->userdata('message_type') . '"
+      });';
+      $this->session->unset_userdata('message'); 
+      $this->session->unset_userdata('message_type'); 
+    }
+  ?>
 
   $(function () {
     bsCustomFileInput.init();
@@ -423,8 +444,29 @@
         "ordering": false,
       }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
 
-      $("#tanggal_pencarian").on('change', function () {
-        $("#example1").DataTable().columns(-3).search(this.value).draw();
+      var table = $('#example1').DataTable();
+
+      // Custom filtering function
+      DataTable.ext.search.push(
+          function(settings, data, dataIndex) {
+              var startDate = $('#start_date').val();
+              var endDate = $('#end_date').val();
+              var dateIndex = data.length - 3; 
+              var date = data[dateIndex];
+              console.log(data);
+              if ((startDate == "" && endDate == "") ||
+                  (startDate == "" && date <= endDate) ||
+                  (startDate <= date && endDate == "") ||
+                  (startDate <= date && date <= endDate)) {
+                  return true;
+              }
+              return false;
+          }
+      );
+
+      // Event listener to the two range filtering inputs to redraw on input
+      $('#start_date, #end_date').change(function() {
+          table.draw();
       });
 
       $('#example2').DataTable({

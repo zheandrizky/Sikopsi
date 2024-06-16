@@ -17,7 +17,7 @@
   <!-- Style -->
   <link rel="stylesheet" href="<?php echo base_url('assets/auth/css'); ?>/style.css">
 
-  <title>Login #2</title>
+  <title>SIKOPSI-Login</title>
 </head>
 
 <body>
@@ -62,6 +62,10 @@
             <?php if (isset($error)) { ?>
               <div class="alert alert-danger" role="alert">
                 <?php echo $error; ?>
+              </div>
+            <?php } elseif ($this->session->flashdata('success')) { ?>
+              <div class="alert alert-success" role="alert">
+                <?php echo $this->session->flashdata('success'); ?>
               </div>
             <?php } ?>
             <?php echo form_open('auth/login'); ?>

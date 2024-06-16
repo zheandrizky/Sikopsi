@@ -15,6 +15,7 @@ class Saham extends My_Controller
     {
         $data['title'] = "List Saham";
         $data['saham'] = $this->Saham_model->get_all_saham();
+        $data['total_saham'] = $this->Saham_model->cek_total_saham();
         $this->load->view('admin/template/upper.php', $data);
         $this->load->view('admin/saham/list.php', $data);
         $this->load->view('admin/template/lower.php');
@@ -54,12 +55,15 @@ class Saham extends My_Controller
                     $new_kode_saham = $this->generate_new_kode_saham($last_kode_saham);
 
                     // Ambil inputan lain
+
                     $data = array(
                         'kode_saham' => $new_kode_saham,
                         'nik' => $this->session->userdata('nik'),
-                        'jumlah' => $this->input->post('jumlah'),
+                        'tanggal_pembayaran_saham' => date('Y-m-d'),
+                        'jumlah_saham' => $this->input->post('jumlah_saham'),
                         'bukti_pembayaran_saham' => $unique_file_name,
                         'status_pembayaran_saham' => 'diproses',
+                        'keterangan_pembayaran_saham' => 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar',
                     );
 
                     $this->Saham_model->add_saham($data);
@@ -102,5 +106,19 @@ class Saham extends My_Controller
 
         }
     }
+
+    public function delete($kode_saham)
+    {
+        if ($this->Saham_model->delete_saham($kode_saham)) {
+            $this->session->set_flashdata('message', 'Saham berhasil dihapus.');
+            $this->session->set_flashdata('message_type', 'success');
+        } else {
+            $this->session->set_flashdata('message', 'Gagal menghapus saham.');
+            $this->session->set_flashdata('message_type', 'error');
+        }
+
+        redirect('saham');
+    }
+
 
 }

@@ -28,13 +28,11 @@
                   <h3 class="card-title">DataTable with default features</h3>
                 </div>
                 <div class="col-md-6 text-right">
-                  <!-- <a class="btn btn-primary float-right" href="<?php //echo site_url('pinjam/add'); ?>">Add</a> -->
                   <?php if ($this->session->userdata('jabatan') == 'anggota'): ?>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg-add">
                       Add
                     </button>
                   <?php endif; ?>
-
                 </div>
               </div>
             </div>
@@ -68,8 +66,19 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <label for="">Tanggal Pencarian:</label>
-              <input id='tanggal_pencarian' type="date">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                  <strong>Total Pinjam:</strong> <?php echo idrFormat($total_pinjam) ?>
+                </div>
+                <div class="col-md-4">
+                  <strong>Total Pegembalian:</strong> <?php echo idrFormat($total_pengembalian) ?>
+                </div>
+              </div>
+              <label for="start_date">Start Date:</label>
+              <input type="date" id="start_date">
+              <label for="end_date">End Date:</label>
+              <input type="date" id="end_date">
+              <br>
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
@@ -86,7 +95,7 @@
                     <tr>
                       <td><?php echo $p['kode_pinjam']; ?></td>
                       <td><?php echo $p['nama']; ?></td>
-                      <td><?php echo $p['jumlah_pinjam']; ?></td>
+                      <td><?php echo idrFormat($p['jumlah_pinjam']); ?></td>
                       <td><?php echo $p['tgl_pinjam']; ?></td>
                       <td>
                         <?php

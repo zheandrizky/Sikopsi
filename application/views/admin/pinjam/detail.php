@@ -71,7 +71,7 @@
                   <strong>Kode Pinjam:</strong> <?php echo $kode_pinjam; ?>
                 </div>
                 <div class="col-md-4">
-                  <strong>Jumlah Pinjam:</strong> <?php echo $jumlah_pinjam; ?>
+                  <strong>Jumlah Pinjam:</strong> <?php echo idrFormat($jumlah_pinjam); ?>
                 </div>
                 <div class="col-md-4">
                   <strong>Bunga Pinjaman:</strong> <?php echo $bunga_pinjaman; ?>
@@ -93,18 +93,18 @@
                   <?php foreach ($pengembalian as $p) { ?>
                     <tr>
                       <td><?php echo $p['kode_pengembalian']; ?></td>
-                      <td><?php echo $p['jumlah_pengembalian']; ?></td>
+                      <td><?php echo idrFormat($p['jumlah_pengembalian']); ?></td>
                       <td>
                         <?php
-                        if ($p['status_pengembalian'] == 'diproses') {
+                        if ($p['status_pembayaran_pengembalian'] == 'diproses') {
                           $color = 'warning';
-                        } elseif ($p['status_pengembalian'] == 'ditolak') {
+                        } elseif ($p['status_pembayaran_pengembalian'] == 'ditolak') {
                           $color = 'danger';
                         } else {
                           $color = 'success';
                         }
                         ?>
-                        <span class='badge bg-<?php echo $color; ?>'><?php echo $p['status_pengembalian']; ?></span>
+                        <span class='badge bg-<?php echo $color; ?>'><?php echo $p['status_pembayaran_pengembalian']; ?></span>
                       </td>
                       <td>
                         <?php if ($this->session->userdata('jabatan') == 'pengurus') { ?>
@@ -147,10 +147,10 @@
                               style="max-width: 200px; max-height: 200px; display: none;">
                             <div class="form-group col-sm-6">
                               <label>Status</label>
-                              <select name="status_pengembalian" class="form-control select2" style="width: 100%;">
-                                <option value="diproses" <?php echo ($p['status_pengembalian'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
-                                <option value="ditolak" <?php echo ($p['status_pengembalian'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
-                                <option value="diterima" <?php echo ($p['status_pengembalian'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
+                              <select name="status_pembayaran_pengembalian" class="form-control select2" style="width: 100%;">
+                                <option value="diproses" <?php echo ($p['status_pembayaran_pengembalian'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
+                                <option value="ditolak" <?php echo ($p['status_pembayaran_pengembalian'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
+                                <option value="diterima" <?php echo ($p['status_pembayaran_pengembalian'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
                               </select>
                             </div>
                             <div class="form-group">

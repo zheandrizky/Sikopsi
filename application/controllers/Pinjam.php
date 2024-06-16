@@ -9,26 +9,26 @@ class Pinjam extends My_Controller
         parent::__construct();
         $this->check_login();
         $this->load->model('Pinjam_model');
+        $this->load->model('Saham_model');
         $this->load->model('Pengembalian_model');
     }
 
     public function index()
     {
         $data['title'] = "List Pinjam";
+        $data['total_pinjam'] = $this->Pinjam_model->cek_total_pinjam();
+        $data['total_pengembalian'] = $this->Pengembalian_model->cek_total_pengembalian();
         $data['pinjam'] = $this->Pinjam_model->get_all_pinjam();
         $this->load->view('admin/template/upper.php', $data);
         $this->load->view('admin/pinjam/list.php', $data);
         $this->load->view('admin/template/lower.php');
 
         if ($this->session->userdata('jabatan') == 'anggota') {
-            $this->db->select('SUM(s.jumlah) as total');
-            $this->db->from('saham s');
-            $this->db->join('anggota a', 's.nik = a.nik', 'left');
-            $this->db->where('s.nik', $this->session->userdata('nik'));
-            $total = $this->db->get()->row()->total;
+            $total = $this->Saham_model->cek_total_saham();
 
-            if($total < 250000) {
-                $this->session->set_userdata('message', "The event was succesfully removed"); 
+            if ($total < 250000) {
+                $this->session->set_userdata('message_type', 'info');
+                $this->session->set_userdata('message', "Mohon untuk melunasi uang saham terlebih dahulu");
                 redirect($_SERVER['HTTP_REFERER']);
             }
         }
