@@ -40,7 +40,7 @@
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Large Modal</h4>
+                    <h4 class="modal-title">Ajukan Pinjaman</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -66,7 +66,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-            <div class="row mb-3">
+              <div class="row mb-3">
                 <div class="col-md-4">
                   <strong>Total Pinjam:</strong> <?php echo idrFormat($total_pinjam) ?>
                 </div>
@@ -125,7 +125,8 @@
                       <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                           <div class="modal-header">
-                            <h4 class="modal-title">Large Modal</h4>
+                            <h4 class="modal-title">Pengelolaan Pinjaman <?php echo $p['kode_pinjam'] ?>
+                            </h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">&times;</span>
                             </button>
@@ -157,7 +158,7 @@
                               </select>
                             </div>
                             <div class="form-group">
-                              <label>Textarea</label>
+                              <label>Keterangan</label>
                               <textarea name="keterangan_pengajuan_pinjam" class="form-control" rows="3"
                                 placeholder="Masukkan keterangan..."><?php echo $p['keterangan_pengajuan_pinjam']; ?></textarea>
                             </div>

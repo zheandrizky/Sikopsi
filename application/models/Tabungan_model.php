@@ -60,4 +60,10 @@ class Tabungan_model extends CI_Model
         $this->db->where('kode_tabungan', $kode_tabungan);
         $this->db->update('tabungan', $data);
     }
+
+    public function delete_tabungan($kode_tabungan)
+    {
+        $this->db->where('kode_tabungan', $kode_tabungan);
+        return $this->db->delete('tabungan');
+    }
 }

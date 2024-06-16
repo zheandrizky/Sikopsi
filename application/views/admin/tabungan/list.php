@@ -185,6 +185,30 @@
                       </div>
                       <!-- /.modal-dialog -->
                     </div>
+                    <!-- Modal Delete -->
+                    <div class="modal fade" id="modal-delete-<?php echo $t['kode_tabungan'] ?>">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h4 class="modal-title">Konfirmasi Hapus Data Tabungan</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <p>Apakah Anda yakin ingin menghapus data tabungan ini?</p>
+                          </div>
+                          <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <a href="<?php echo base_url('tabungan/delete/' . $t['kode_tabungan']); ?>"
+                              class="btn btn-danger">Ya, Hapus</a>
+                          </div>
+                        </div>
+                        <!-- /.modal-content -->
+                      </div>
+                      <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
                   <?php } ?>
 
                 </tbody>

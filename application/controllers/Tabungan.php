@@ -107,4 +107,17 @@ class Tabungan extends My_Controller
         }
     }
 
+    public function delete($kode_tabungan)
+    {
+        if ($this->Tabungan_model->delete_tabungan($kode_tabungan)) {
+            $this->session->set_flashdata('message', 'Tabungan berhasil dihapus.');
+            $this->session->set_flashdata('message_type', 'success');
+        } else {
+            $this->session->set_flashdata('message', 'Gagal menghapus tabungan.');
+            $this->session->set_flashdata('message_type', 'error');
+        }
+
+        redirect('tabungan');
+    }
+
 }
