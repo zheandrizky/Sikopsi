@@ -13,7 +13,6 @@ class Dashboard extends My_Controller
 
     public function index()
     {
-        // echo print_r($this->session->userdata('logged_in'));die;
         $data['title'] = "Dashboard";
         $data['user_count'] = $this->db->get('anggota')->num_rows();
         $data['saham_count'] = $this->db->get('saham')->num_rows();

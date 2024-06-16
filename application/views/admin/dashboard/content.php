@@ -27,14 +27,12 @@
           <div class="small-box bg-info">
             <div class="inner">
               <h3><?php echo $saham_count; ?></h3>
-
               <p>Saham</p>
             </div>
             <div class="icon">
               <i class="ion ion-cash"></i>
             </div>
-            <a href="<?php echo site_url('saham') ?>" class="small-box-footer">More info <i
-                class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('saham') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -43,14 +41,12 @@
           <div class="small-box bg-success">
             <div class="inner">
               <h3><?php echo $tabungan_count; ?></h3>
-
               <p>Tabungan</p>
             </div>
             <div class="icon">
               <i class="ion ion-social-usd"></i>
             </div>
-            <a href="<?php echo site_url('tabungan') ?>" class="small-box-footer">More info <i
-                class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('tabungan') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -59,14 +55,12 @@
           <div class="small-box bg-danger">
             <div class="inner">
               <h3><?php echo $pinjam_count; ?></h3>
-
               <p>Pinjam&Pengembalian</p>
             </div>
             <div class="icon">
               <i class="ion ion-arrow-return-right"></i>
             </div>
-            <a href="<?php echo site_url('pinjam') ?>" class="small-box-footer">More info <i
-                class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('pinjam') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -75,7 +69,6 @@
           <div class="small-box bg-warning">
             <div class="inner">
               <h3><?php echo $user_count; ?></h3>
-
               <p>User Registrations</p>
             </div>
             <div class="icon">
@@ -100,8 +93,7 @@
             </div><!-- /.card-header -->
             <div class="card-body">
               <div class="tab-content p-0">
-                <!-- Morris chart - Sales -->
-
+                <!-- Bar Chart -->
                 <canvas id="bar_chart"></canvas>
               </div>
             </div><!-- /.card-body -->
@@ -118,8 +110,7 @@
             </div><!-- /.card-header -->
             <div class="card-body">
               <div class="tab-content p-0">
-                <!-- Morris chart - Sales -->
-
+                <!-- Doughnut Chart -->
                 <canvas id="doughnut_chart"></canvas>
               </div>
             </div><!-- /.card-body -->
@@ -131,3 +122,70 @@
   </section>
   <!-- /.content -->
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Bar Chart
+    let bar_chart = document.getElementById('bar_chart');
+    new Chart(bar_chart, {
+      type: 'bar',
+      data: {
+        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        datasets: [
+          {
+            label: 'Saham',
+            data: <?= $saham_bar_chart ?>,
+            borderWidth: 1,
+            backgroundColor: '#9BD0F5'
+          },
+          {
+            label: 'Tabungan',
+            data: <?= $tabungan_bar_chart ?>,
+            borderWidth: 1,
+            backgroundColor: '#FFB1C1'
+          },
+          {
+            label: 'Pinjam',
+            data: <?= $pinjam_bar_chart ?>,
+            borderWidth: 1,
+            backgroundColor: '#A0F78D'
+          },
+          {
+            label: 'Pengembalian',
+            data: <?= $pengembalian_bar_chart ?>,
+            borderWidth: 1,
+            backgroundColor: '#F7D06F'
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Doughnut Chart
+    let doughnut_chart = document.getElementById('doughnut_chart');
+    new Chart(doughnut_chart, {
+      type: 'doughnut',
+      data: {
+        labels: ['Saham', 'Tabungan', 'Pinjam', 'Pengembalian'],
+        datasets: [{
+          label: 'Total',
+          data: <?= $doughnut_chart; ?>,
+          backgroundColor: ['#9BD0F5', '#FFB1C1', '#A0F78D', '#F7D06F']
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+</script>

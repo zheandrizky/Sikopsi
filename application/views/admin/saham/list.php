@@ -189,7 +189,6 @@
                       <!-- /.modal-dialog -->
                     </div>
 
-                    <!-- modal delete -->
                     <!-- Modal Delete -->
                     <div class="modal fade" id="modal-delete-<?php echo $s['kode_saham'] ?>">
                       <div class="modal-dialog modal-dialog-centered">
