@@ -115,6 +115,12 @@
           data: <?= $pinjam_bar_chart ?>,
           borderWidth: 1,
           backgroundColor: '#A0F78D'
+        },
+        {
+          label: 'Pengembalian',
+          data: <?= $pengembalian_bar_chart ?>,
+          borderWidth: 1,
+          backgroundColor: '#F7D06F'
         }
       ]
     },
@@ -134,11 +140,11 @@
   new Chart(doughnut_char, {
     type: 'doughnut',
     data: {
-      labels: ['Saham', 'Tabungan', 'Pinjam'],
+      labels: ['Saham', 'Tabungan', 'Pinjam', 'Pengembalian'],
       datasets: [{
         label: 'Total',
         data: <?= $doughnut_chart; ?>,
-        backgroundColor: ['#9BD0F5', '#FFB1C1', '#A0F78D']
+        backgroundColor: ['#9BD0F5', '#FFB1C1', '#A0F78D', '#F7D06F']
       }]
     },
     options: {

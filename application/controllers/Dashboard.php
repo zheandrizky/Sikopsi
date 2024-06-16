@@ -15,12 +15,12 @@ class Dashboard extends My_Controller
     {
         // echo print_r($this->session->userdata('logged_in'));die;
         $data['title'] = "Dashboard";
-        $data['user_count'] = $this->db->get('anggota')->num_rows(); 
-        $data['saham_count'] = $this->db->get('saham')->num_rows(); 
-        $data['tabungan_count'] = $this->db->get('tabungan')->num_rows(); 
-        $data['pinjam_count'] = $this->db->get('pinjam')->num_rows(); 
+        $data['user_count'] = $this->db->get('anggota')->num_rows();
+        $data['saham_count'] = $this->db->get('saham')->num_rows();
+        $data['tabungan_count'] = $this->db->get('tabungan')->num_rows();
+        $data['pinjam_count'] = $this->db->get('pinjam')->num_rows();
 
-        $this->db->select("SUM(jumlah) as total, MONTH(tanggal_pembayaran_saham) as bulan");
+        $this->db->select("SUM(jumlah_saham) as total, MONTH(tanggal_pembayaran_saham) as bulan");
         $this->db->order_by('MONTH(tanggal_pembayaran_saham)');
         $saham_bar_chart = $this->db->get_where('saham', [
             'YEAR(tanggal_pembayaran_saham)=' => date('Y'),
@@ -41,17 +41,26 @@ class Dashboard extends My_Controller
             'status_pengajuan_pinjam' => 'diterima'
         ])->result();
 
-        for ($i=0; $i < 12; $i++) { 
+        $this->db->select("SUM(jumlah_pengembalian) as total, MONTH(tanggal_pengembalian) as bulan");
+        $this->db->order_by('MONTH(tanggal_pengembalian)');
+        $pengembalian_bar_chart = $this->db->get_where('pengembalian', [
+            'YEAR(tanggal_pengembalian)=' => date('Y'),
+            'status_pembayaran_pengembalian' => 'diterima'
+        ])->result();
+
+        for ($i = 0; $i < 12; $i++) {
             $data['saham_bar_chart'][] = (!empty($saham_bar_chart[$i]->total)) ? $saham_bar_chart[$i]->total : 0;
             $data['tabungan_bar_chart'][] = (!empty($tabungan_bar_chart[$i]->total)) ? $tabungan_bar_chart[$i]->total : 0;
             $data['pinjam_bar_chart'][] = (!empty($pinjam_bar_chart[$i]->total)) ? $pinjam_bar_chart[$i]->total : 0;
+            $data['pengembalian_bar_chart'][] = (!empty($pengembalian_bar_chart[$i]->total)) ? $pengembalian_bar_chart[$i]->total : 0;
         }
 
         $data['saham_bar_chart'] = json_encode($data['saham_bar_chart']);
         $data['tabungan_bar_chart'] = json_encode($data['tabungan_bar_chart']);
         $data['pinjam_bar_chart'] = json_encode($data['pinjam_bar_chart']);
-        
-        $this->db->select("SUM(jumlah) as total");
+        $data['pengembalian_bar_chart'] = json_encode($data['pengembalian_bar_chart']);
+
+        $this->db->select("SUM(jumlah_saham) as total");
         $saham_bar_doughnut = $this->db->get_where('saham', [
             'status_pembayaran_saham' => 'diterima'
         ])->row()->total;
@@ -66,12 +75,17 @@ class Dashboard extends My_Controller
             'status_pengajuan_pinjam' => 'diterima'
         ])->row()->total;
 
-        $data['doughnut_chart'] = json_encode([$saham_bar_doughnut, $tabungan_bar_doughnut, $pinjam_bar_doughnut]);
+        $this->db->select("SUM(jumlah_pengembalian) as total");
+        $pengembalian_bar_doughnut = $this->db->get_where('pengembalian', [
+            'status_pembayaran_pengembalian' => 'diterima'
+        ])->row()->total;
+
+        $data['doughnut_chart'] = json_encode([$saham_bar_doughnut, $tabungan_bar_doughnut, $pinjam_bar_doughnut, $pengembalian_bar_doughnut]);
 
         $this->load->view('admin/template/upper.php', $data);
-        $this->load->view('admin/template/content.php', $data);
+        $this->load->view('admin/dashboard/content.php', $data);
         $this->load->view('admin/template/lower.php', $data);
     }
 
-   
+
 }
