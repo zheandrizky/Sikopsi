@@ -31,9 +31,10 @@
               <p>Saham</p>
             </div>
             <div class="icon">
-              <i class="ion ion-bag"></i>
+              <i class="ion ion-cash"></i>
             </div>
-            <a href="<?php echo site_url('saham')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('saham') ?>" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -46,9 +47,10 @@
               <p>Tabungan</p>
             </div>
             <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+              <i class="ion ion-social-usd"></i>
             </div>
-            <a href="<?php echo site_url('tabungan')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('tabungan') ?>" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -61,9 +63,10 @@
               <p>Pinjam&Pengembalian</p>
             </div>
             <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+              <i class="ion ion-arrow-return-right"></i>
             </div>
-            <a href="<?php echo site_url('pinjam')?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('pinjam') ?>" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -98,7 +101,7 @@
             <div class="card-body">
               <div class="tab-content p-0">
                 <!-- Morris chart - Sales -->
-                
+
                 <canvas id="bar_chart"></canvas>
               </div>
             </div><!-- /.card-body -->
@@ -116,7 +119,7 @@
             <div class="card-body">
               <div class="tab-content p-0">
                 <!-- Morris chart - Sales -->
-                
+
                 <canvas id="doughnut_chart"></canvas>
               </div>
             </div><!-- /.card-body -->
