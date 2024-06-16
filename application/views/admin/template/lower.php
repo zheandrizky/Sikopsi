@@ -90,6 +90,65 @@
 <script src="<?php echo base_url('assets/admin/plugins'); ?>/dropzone/min/dropzone.min.js"></script>
 <!-- Page specific script -->
 <script>
+    
+  let bar_chart = document.getElementById('bar_chart');
+
+  new Chart(bar_chart, {
+    type: 'bar',
+    data: {
+      labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+      datasets: [
+        {
+          label: 'Saham',
+          data: <?= $saham_bar_chart ?>,
+          borderWidth: 1,
+          backgroundColor: '#9BD0F5'
+        }, 
+        {
+          label: 'Tabungan',
+          data: <?= $tabungan_bar_chart ?>,
+          borderWidth: 1,
+          backgroundColor: '#FFB1C1'
+        },
+        {
+          label: 'Pinjam',
+          data: <?= $pinjam_bar_chart ?>,
+          borderWidth: 1,
+          backgroundColor: '#A0F78D'
+        }
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  console.log(<?= $doughnut_chart ?> );
+  
+  let doughnut_char = document.getElementById('doughnut_chart');
+
+  new Chart(doughnut_char, {
+    type: 'doughnut',
+    data: {
+      labels: ['Saham', 'Tabungan', 'Pinjam'],
+      datasets: [{
+        label: 'Total',
+        data: <?= $doughnut_chart; ?>,
+        backgroundColor: ['#9BD0F5', '#FFB1C1', '#A0F78D']
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
   
   function ubahKeterangan(select) {
     var kodeSaham = select.id.split('-')[1];
