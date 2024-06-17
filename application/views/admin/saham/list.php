@@ -123,7 +123,7 @@
                       </td>
                       <td>
                         <button type="button"
-                          class="btn btn-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'info' : 'warning'; ?>"
+                          class="btn btn-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'primary' : 'warning'; ?>"
                           data-toggle="modal" data-target="#modal-lg-<?php echo $s['kode_saham'] ?>">
                           <i
                             class="fas fa-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'eye' : 'pencil-alt'; ?>"></i>

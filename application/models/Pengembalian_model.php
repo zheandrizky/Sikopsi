@@ -68,4 +68,14 @@ class Pengembalian_model extends CI_Model
         return $query->result_array();
     }
 
+    public function get_total_pengembalian_by_kode_pinjam($kode_pinjam)
+    {
+        $this->db->select_sum('jumlah_pengembalian');
+        $this->db->where('kode_pinjam', $kode_pinjam);
+        $this->db->where('status_pembayaran_pengembalian', 'diterima');
+        $query = $this->db->get('pengembalian');
+        // print_r($this->db->last_query());die;
+        return $query->result_array();
+    }
+
 }

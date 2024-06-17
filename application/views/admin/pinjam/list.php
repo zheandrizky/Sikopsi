@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>DataTables</h1>
+          <h1>Pinjam&Pengembalian</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
@@ -25,13 +25,22 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-md-6">
-                  <h3 class="card-title">DataTable with default features</h3>
+                  <h3 class="card-title">Daftar Transaksi Pinjaman dan Pengembalian</h3>
                 </div>
                 <div class="col-md-6 text-right">
                   <?php if ($this->session->userdata('jabatan') == 'anggota'): ?>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-lg-add">
+                    <?php if (($total_pinjam + $total_bunga) - $total_pengembalian == 0) {
+                      $this->session->set_userdata('message_type', 'info');
+                      $this->session->set_userdata('message', "Mohon untuk melunasi pinjaman terlebih dahulu, sebelum mengajukan pinjaman baru");
+                      redirect($_SERVER['HTTP_REFERER']);
+                    } ?>
+                    <button id="addButton" type="button" class="btn btn-primary">
                       Add
                     </button>
+                    <!-- <button id="addButton" type="button" class="btn btn-primary" data-toggle="modal"
+                      data-target="#modal-lg-add">
+                      Add
+                    </button> -->
                   <?php endif; ?>
                 </div>
               </div>
@@ -45,11 +54,12 @@
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <?php echo form_open_multipart('pinjam/add'); ?>
+                  <?php echo form_open('pinjam/add'); ?>
                   <div class="modal-body">
                     <div class="form-group">
                       <label for="jumlah">Jumlah yang diajukan</label>
-                      <input type="number" class="form-control" placeholder="0" name="jumlah_pinjam" required>
+                      <input type="number" max="5000000" class="form-control" placeholder="0" name="jumlah_pinjam"
+                        required>
                     </div>
                     <!-- /.card-body -->
                   </div>
@@ -72,6 +82,9 @@
                 </div>
                 <div class="col-md-4">
                   <strong>Total Pegembalian:</strong> <?php echo idrFormat($total_pengembalian) ?>
+                </div>
+                <div class="col-md-4">
+                  <strong>Total Bunga:</strong> <?php echo idrFormat($total_bunga) ?>
                 </div>
               </div>
               <label for="start_date">Start Date:</label>
@@ -132,35 +145,35 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <?php echo form_open_multipart('pinjam/update'); ?>
-                            <input type="hidden" name="kode_pinjam" value="<?php echo $p['kode_pinjam'] ?>">
+                            <?php echo form_open_multipart('pinjam/update/' . $p['kode_pinjam']); ?>
                             <div class="form-group">
                               <label for="jumlah_pinjam">Jumlah yang dibayarkan</label>
                               <input type="number" class="form-control" placeholder="0"
                                 value="<?php echo $p['jumlah_pinjam']; ?>" name="jumlah_pinjam" readonly>
                             </div>
-                            <div class="form-group">
-                              <label for="bukti_pembayaran">Upload Bukti</label>
-                              <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFile" name="bukti_pembayaran"
-                                  onchange="previewImage()">
-                                <label class="custom-file-label" for="customFile">Choose file</label>
-                              </div>
-                            </div>
                             <img id="preview" src="#" alt="Preview"
                               style="max-width: 200px; max-height: 200px; display: none;">
                             <div class="form-group col-sm-6">
                               <label>Status</label>
-                              <select name="status_pengajuan_pinjam" class="form-control select2" style="width: 100%;">
+                              <select id="status-<?php echo $p['kode_pinjam'] ?>" name="status_pengajuan_pinjam"
+                                class="form-control select2" style="width: 100%;" onchange="ubahKeterangan(this)" <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'disabled' : ''; ?>>
                                 <option value="diproses" <?php echo ($p['status_pengajuan_pinjam'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
                                 <option value="ditolak" <?php echo ($p['status_pengajuan_pinjam'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
                                 <option value="diterima" <?php echo ($p['status_pengajuan_pinjam'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
                               </select>
                             </div>
+                            <div class="form-group col-sm-6">
+                              <label for="bukti_pembayaran">Upload Bukti</label>
+                              <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="customFile" name="bukti_pembayaran"
+                                  onchange="previewImage()" required>
+                                <label class="custom-file-label" for="customFile">Choose file</label>
+                              </div>
+                            </div>
                             <div class="form-group">
                               <label>Keterangan</label>
-                              <textarea name="keterangan_pengajuan_pinjam" class="form-control" rows="3"
-                                placeholder="Masukkan keterangan..."><?php echo $p['keterangan_pengajuan_pinjam']; ?></textarea>
+                              <textarea id="keterangan-<?php echo $p['kode_pinjam'] ?>" name="keterangan_pengajuan_pinjam"
+                                class="form-control" rows="3" placeholder="Masukkan keterangan..." <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'readonly' : ''; ?>><?php echo $p['keterangan_pengajuan_pinjam']; ?></textarea>
                             </div>
                             <!-- /.card-body -->
                           </div>
@@ -201,3 +214,23 @@
   </section>
   <!-- /.content -->
 </div>
+
+<script>
+  document.getElementById('addButton').addEventListener('click', function () {
+    console.log('Hello'); // Pastikan pesan ini muncul di konsol saat tombol ditekan
+    <?php if (($total_pinjam + $total_bunga) - $total_pengembalian > 0): ?>
+      // Jika terdapat hutang, tampilkan SweetAlert dan reload halaman setelahnya
+      Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: 'Mohon untuk melunasi pinjaman sebelumnya terlebih dahulu, sebelum mengajukan pinjaman baru'
+      })
+      // .then((result) => {
+      //   window.location.reload(); // Reload halaman setelah pengguna menutup alert
+      // });
+    <?php else: ?>
+      // Jika tidak ada hutang, buka modal
+      $('#modal-lg-add').modal('show');
+    <?php endif; ?>
+  });
+</script>

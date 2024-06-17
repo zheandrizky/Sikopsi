@@ -17,6 +17,7 @@ class Pinjam extends My_Controller
     {
         $data['title'] = "List Pinjam";
         $data['total_pinjam'] = $this->Pinjam_model->cek_total_pinjam();
+        $data['total_bunga'] = $this->Pinjam_model->cek_total_bunga();
         $data['total_pengembalian'] = $this->Pengembalian_model->cek_total_pengembalian();
         $data['pinjam'] = $this->Pinjam_model->get_all_pinjam();
         $this->load->view('admin/template/upper.php', $data);
@@ -47,6 +48,7 @@ class Pinjam extends My_Controller
             'nik' => $this->session->userdata('nik'),
             'jumlah_pinjam' => $this->input->post('jumlah_pinjam'),
             'status_pengajuan_pinjam' => 'diproses',
+            'keterangan_pengajuan_pinjam' => 'Saat ini, pembayaran saham Anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar',
         );
         $this->Pinjam_model->add_pinjam($data);
         redirect('pinjam');
@@ -104,7 +106,7 @@ class Pinjam extends My_Controller
                     $bunga_pinjaman = $jumlah_pinjam * 0.05;
                     // Ambil inputan lain
                     $data = array(
-                        'jumlah_pinjam' => jumlah_pinjam,
+                        'jumlah_pinjam' => $jumlah_pinjam,
                         'status_pengajuan_pinjam' => $this->input->post('status_pengajuan_pinjam'),
                         'keterangan_pengajuan_pinjam' => $this->input->post('keterangan_pengajuan_pinjam'),
                     );
@@ -132,11 +134,15 @@ class Pinjam extends My_Controller
 
             // Dapatkan informasi pinjaman
             $pinjaman_info = $this->Pinjam_model->get_pinjaman_by_kode_pinjam($kode_pinjam);
-
+            $pengembalian_sum = $this->Pengembalian_model->get_total_pengembalian_by_kode_pinjam($kode_pinjam);
+            
             $data['kode_pinjam'] = $pinjaman_info['kode_pinjam'];
             $data['jumlah_pinjam'] = $pinjaman_info['jumlah_pinjam'];
+            $data['total_pengembalian'] = $pengembalian_sum[0]['jumlah_pengembalian'];
             $data['bunga_pinjaman'] = $pinjaman_info['bunga_pinjaman'];
             $data['jatuh_tempo'] = $pinjaman_info['jatuh_tempo'];
+            $data['bukti_peminjaman'] = $pinjaman_info['bukti_peminjaman'];
+            $data['keterangan_pengajuan_pinjam'] = $pinjaman_info['keterangan_pengajuan_pinjam'];
 
             $this->load->view('admin/template/upper.php', $data);
             $this->load->view('admin/pinjam/detail.php', $data);
