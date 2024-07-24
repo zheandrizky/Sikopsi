@@ -32,7 +32,8 @@
             <div class="icon">
               <i class="ion ion-cash"></i>
             </div>
-            <a href="<?php echo site_url('saham') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('saham') ?>" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -46,7 +47,8 @@
             <div class="icon">
               <i class="ion ion-social-usd"></i>
             </div>
-            <a href="<?php echo site_url('tabungan') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('tabungan') ?>" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -60,23 +62,26 @@
             <div class="icon">
               <i class="ion ion-arrow-return-right"></i>
             </div>
-            <a href="<?php echo site_url('pinjam') ?>" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="<?php echo site_url('pinjam') ?>" class="small-box-footer">More info <i
+                class="fas fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-6">
-          <!-- small box -->
-          <div class="small-box bg-warning">
-            <div class="inner">
-              <h3><?php echo $user_count; ?></h3>
-              <p>User Registrations</p>
+        <?php if ($this->session->userdata('jabatan') != 'anggota'): ?>
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3><?php echo $user_count; ?></h3>
+                <p>User Registrations</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
             </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
-            </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
           </div>
-        </div>
+        <?php endif ?>
       </div>
       <!-- /.row -->
       <!-- Main row -->
@@ -124,7 +129,7 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     // Bar Chart
     let bar_chart = document.getElementById('bar_chart');
     new Chart(bar_chart, {

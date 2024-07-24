@@ -72,6 +72,14 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a href="https://youtu.be/WmGALN63QuQ" class="nav-link">
+                        <i class="nav-icon fas fa-question-circle"></i>
+                        <p>
+                            How to Use?
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

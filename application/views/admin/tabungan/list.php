@@ -119,11 +119,11 @@
                       </td>
                       <td>
                         <button type="button"
-                          class="btn btn-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'primary' : 'warning'; ?>"
+                          class="btn btn-<?php echo ($this->session->userdata('jabatan') == 'anggota' || $this->session->userdata('jabatan') == 'ketua') ? 'primary' : 'warning'; ?>"
                           data-toggle="modal" data-target="#modal-lg-<?php echo $t['kode_tabungan'] ?>">
                           <i
-                            class="fas fa-<?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'eye' : 'pencil-alt'; ?>"></i>
-                          <?php echo ($this->session->userdata('jabatan') == 'anggota') ? 'Detail' : 'Manage'; ?>
+                            class="fas fa-<?php echo ($this->session->userdata('jabatan') == 'anggota' || $this->session->userdata('jabatan') == 'ketua') ? 'eye' : 'pencil-alt'; ?>"></i>
+                          <?php echo ($this->session->userdata('jabatan') == 'anggota' || $this->session->userdata('jabatan') == 'ketua') ? 'Detail' : 'Manage'; ?>
                         </button>
                       </td>
                     </tr>

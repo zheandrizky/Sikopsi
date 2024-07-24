@@ -9,6 +9,7 @@ class Pengembalian extends My_Controller
         parent::__construct();
         $this->check_login();
         $this->load->model('Pengembalian_model');
+        $this->load->model('Pinjam_model');
     }
 
     public function add()
@@ -40,28 +41,43 @@ class Pengembalian extends My_Controller
                     $new_kode_pengembalian = $this->generate_new_kode_pengembalian($last_kode_pengembalian);
                     $kode_pinjam = $this->input->post('kode_pinjam');
 
-                    // Ambil inputan lain
-                    $data = array(
-                        'kode_pengembalian' => $new_kode_pengembalian,
-                        'nik' => $this->session->userdata('nik'),
-                        'kode_pinjam' => $kode_pinjam,
-                        'tanggal_pengembalian' => date('Y-m-d'),
-                        'jumlah_pengembalian' => $this->input->post('jumlah_pengembalian'),
-                        'status_pembayaran_pengembalian' => 'diproses',
-                        'keterangan_pembayaran_pengembalian' => 'Saat ini, pembayaran pengembalian anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar',
-                        'bukti_pengembalian' => $unique_file_name,
-                    );
+                    $pinjaman_info = $this->Pinjam_model->get_pinjaman_by_kode_pinjam($kode_pinjam);
+                    $pengembalian_sum = $this->Pengembalian_model->get_total_pengembalian_by_kode_pinjam($kode_pinjam);
+                    $jumlahpinjam = $data['jumlah_pinjam'] = $pinjaman_info['jumlah_pinjam'];
+                    $totalpengembalian = $data['total_pengembalian'] = $pengembalian_sum[0]['jumlah_pengembalian'];
+                    $sisa_cicilan = $jumlahpinjam - $totalpengembalian;
+                    $jumlah_pengembalian= $this->input->post('jumlah_pengembalian');
 
-                    $this->Pengembalian_model->add_pengembalian($data);
-                    redirect('pinjam/update/'. $kode_pinjam);
+                    if ($jumlah_pengembalian <= $sisa_cicilan) {
+                        $data = array(
+                            'kode_pengembalian' => $new_kode_pengembalian,
+                            'nik' => $this->session->userdata('nik'),
+                            'kode_pinjam' => $kode_pinjam,
+                            'tanggal_pengembalian' => date('Y-m-d'),
+                            'jumlah_pengembalian' => $jumlah_pengembalian,
+                            'status_pembayaran_pengembalian' => 'diproses',
+                            'keterangan_pembayaran_pengembalian' => 'Saat ini, pembayaran pengembalian anda sedang diproses untuk diverifikasi. Proses ini memastikan bahwa semua informasi dan dokumen terkait terverifikasi dengan benar',
+                            'bukti_pengembalian' => $unique_file_name,
+                        );
+
+                        $this->Pengembalian_model->add_pengembalian($data);
+                        redirect('pinjam/update/' . $kode_pinjam);
+                    } else {
+                        $this->session->set_flashdata('message', 'Gagal membayar cicilan, karena jumlah yang anda masukkan lebih besar dari sisa cicilan anda.');
+                        $this->session->set_flashdata('message_type', 'error');
+                        redirect('pinjam/update/' . $kode_pinjam);
+                    }
+
+                    // Ambil inputan lain
+
                 } else {
                     $data['error'] = 'Failed to rename the uploaded file.';
                     log_message('error', 'Rename Error: ' . $data['error']);
                 }
             }
 
-            $this->Pengembalian_model->add_pengembalian($data);
-            redirect('pinjam/update/' . $kode_pinjam);
+            // $this->Pengembalian_model->add_pengembalian($data);
+            // redirect('pinjam/update/' . $kode_pinjam);
         }
     }
 

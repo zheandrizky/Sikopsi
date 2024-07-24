@@ -59,7 +59,15 @@
           <div class="col-md-7">
             <h3>Create New Account</h3>
             <p class="mb-4">Selamat datang, silahkan buat akun Anda</p>
-
+            <?php if (isset($error)) { ?>
+              <div class="alert alert-danger" role="alert">
+                <?php echo $error; ?>
+              </div>
+            <?php } elseif ($this->session->flashdata('success')) { ?>
+              <div class="alert alert-success" role="alert">
+                <?php echo $this->session->flashdata('success'); ?>
+              </div>
+            <?php } ?>
             <?php echo form_open('auth/register'); ?>
             <div class="form-group first">
               <label for="username">NIK</label>

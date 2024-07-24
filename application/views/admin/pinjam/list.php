@@ -29,18 +29,9 @@
                 </div>
                 <div class="col-md-6 text-right">
                   <?php if ($this->session->userdata('jabatan') == 'anggota'): ?>
-                    <?php if (($total_pinjam + $total_bunga) - $total_pengembalian == 0) {
-                      $this->session->set_userdata('message_type', 'info');
-                      $this->session->set_userdata('message', "Mohon untuk melunasi pinjaman terlebih dahulu, sebelum mengajukan pinjaman baru");
-                      redirect($_SERVER['HTTP_REFERER']);
-                    } ?>
                     <button id="addButton" type="button" class="btn btn-primary">
                       Add
                     </button>
-                    <!-- <button id="addButton" type="button" class="btn btn-primary" data-toggle="modal"
-                      data-target="#modal-lg-add">
-                      Add
-                    </button> -->
                   <?php endif; ?>
                 </div>
               </div>

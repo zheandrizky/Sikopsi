@@ -49,9 +49,11 @@
                   <div class="modal-body">
                     <input type="hidden" value="<?php echo $kode_pinjam ?>" name="kode_pinjam">
                     <div class="form-group">
-                      <label for="jumlah">Jumlah yang diajukan</label>
-                      <input type="number" class="form-control" placeholder="0" name="jumlah_pengembalian"
-                        max="<?php echo ($jumlah_pinjam + $bunga_pinjaman) - $total_pengembalian ?>" required>
+                      <label for="jumlah">Jumlah cicilan yang dibayarkan</label>
+                      <!-- <input type="number" class="form-control" placeholder="0" name="jumlah_pengembalian"
+                        max="<?php //echo ($jumlah_pinjam + $bunga_pinjaman) - $total_pengembalian ?>" required> -->
+                      <input type="number" class="form-control" placeholder="0" name="jumlah_pengembalian" max=""
+                        required>
                     </div>
                     <div class="form-group">
                       <label for="bukti_pembayaran">Bukti Pembayaran</label>
@@ -92,6 +94,11 @@
                 <div class="col-md-3">
                   <strong>Jumlah Pengembalian:</strong>
                   <?php echo $total_pengembalian !== null ? idrFormat($total_pengembalian) : '0'; ?>
+                </div>
+                <div class="col-md-3">
+                  <strong>Sisa Cicilan:</strong>
+                  <?php $sisa_cicilan = $jumlah_pinjam - $total_pengembalian ?>
+                  <?php echo $sisa_cicilan !== null ? idrFormat($sisa_cicilan) : '0'; ?>
                 </div>
                 <div class="col-md-12">
                   <strong>Bukti Peminjaman:</strong>
@@ -154,7 +161,7 @@
                             </button>
                           </div>
                           <div class="modal-body">
-                            <?php echo form_open('pengembalian/update/'. $p['kode_pengembalian']); ?>
+                            <?php echo form_open('pengembalian/update/' . $p['kode_pengembalian']); ?>
                             <input type="hidden" name="kode_pengembalian" value="<?php echo $p['kode_pengembalian'] ?>">
                             <input type="hidden" name="kode_pinjam" value="<?php echo $p['kode_pinjam'] ?>">
                             <div class="form-group">
@@ -172,8 +179,9 @@
                             </div>
                             <div class="form-group col-sm-6">
                               <label>Status</label>
-                              <select id="status-<?php echo $p['kode_pengembalian'] ?>" name="status_pembayaran_pengembalian"
-                                class="form-control select2" style="width: 100%;" onchange="ubahKeterangan(this)" <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'disabled' : ''; ?>>
+                              <select id="status-<?php echo $p['kode_pengembalian'] ?>"
+                                name="status_pembayaran_pengembalian" class="form-control select2" style="width: 100%;"
+                                onchange="ubahKeterangan(this)" <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'disabled' : ''; ?>>
                                 <option value="diproses" <?php echo ($p['status_pembayaran_pengembalian'] == 'diproses') ? 'selected' : ''; ?>>Diproses</option>
                                 <option value="ditolak" <?php echo ($p['status_pembayaran_pengembalian'] == 'ditolak') ? 'selected' : ''; ?>>Ditolak</option>
                                 <option value="diterima" <?php echo ($p['status_pembayaran_pengembalian'] == 'diterima') ? 'selected' : ''; ?>>Diterima</option>
@@ -181,14 +189,17 @@
                             </div>
                             <div class="form-group">
                               <label>Keterangan</label>
-                              <textarea id="keterangan-<?php echo $p['kode_pengembalian'] ?>" name="keterangan_pembayaran_pengembalian"
-                                class="form-control" rows="3" placeholder="Masukkan keterangan..." <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'readonly' : ''; ?>><?php echo $p['keterangan_pembayaran_pengembalian']; ?></textarea>
+                              <textarea id="keterangan-<?php echo $p['kode_pengembalian'] ?>"
+                                name="keterangan_pembayaran_pengembalian" class="form-control" rows="3"
+                                placeholder="Masukkan keterangan..." <?php echo ($this->session->userdata('jabatan') != 'pengurus') ? 'readonly' : ''; ?>><?php echo $p['keterangan_pembayaran_pengembalian']; ?></textarea>
                             </div>
                             <!-- /.card-body -->
                           </div>
                           <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            <?php if ($this->session->userdata('jabatan') == 'pengurus') { ?>
+                              <button type="submit" class="btn btn-primary">Save changes</button>
+                            <?php } ?>
                             <?php echo form_close(); ?>
                           </div>
                         </div>

@@ -17,7 +17,7 @@
   <!-- Style -->
   <link rel="stylesheet" href="<?php echo base_url('assets/auth/css'); ?>/style.css">
 
-  <title>SIKOPSI-Login</title>
+  <title>SIKOPSI-Login</title>  
 </head>
 
 <body>

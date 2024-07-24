@@ -14,10 +14,16 @@ class Dashboard extends My_Controller
     public function index()
     {
         $data['title'] = "Dashboard";
-        $data['user_count'] = $this->db->get('anggota')->num_rows();
-        $data['saham_count'] = $this->db->get('saham')->num_rows();
-        $data['tabungan_count'] = $this->db->get('tabungan')->num_rows();
-        $data['pinjam_count'] = $this->db->get('pinjam')->num_rows();
+        if ($this->session->userdata('jabatan') == 'anggota') {
+            $data['saham_count'] = $this->db->where('nik', $this->session->userdata('nik'))->get('anggota')->num_rows();
+            $data['tabungan_count'] = $this->db->where('nik', $this->session->userdata('nik'))->get('anggota')->num_rows();
+            $data['pinjam_count'] = $this->db->where('nik', $this->session->userdata('nik'))->get('anggota')->num_rows();
+        } else {
+            $data['user_count'] = $this->db->get('anggota')->num_rows();
+            $data['saham_count'] = $this->db->get('saham')->num_rows();
+            $data['tabungan_count'] = $this->db->get('tabungan')->num_rows();
+            $data['pinjam_count'] = $this->db->get('pinjam')->num_rows();
+        }
 
         $this->db->select("SUM(jumlah_saham) as total, MONTH(tanggal_pembayaran_saham) as bulan");
         $this->db->order_by('MONTH(tanggal_pembayaran_saham)');
